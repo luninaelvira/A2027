@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Интерактив: КФХ «Хрюшки-Ванюшки»</title>
+  <title>Интерактив: ООО «ХимМикс»</title>
   <style>
     * {
       box-sizing: border-box;
@@ -27,7 +27,6 @@
       padding: 28px 24px 24px;
       box-shadow: 0 12px 30px rgba(140, 110, 80, 0.12);
       border: 1px solid #f0e4d6;
-      transition: all 0.2s;
     }
     h1 {
       font-size: 22px;
@@ -38,7 +37,6 @@
       gap: 10px;
       margin-top: 0;
       margin-bottom: 6px;
-      letter-spacing: -0.3px;
     }
     .subhead {
       font-size: 15px;
@@ -173,13 +171,6 @@
       border-left: 5px solid #b79b86;
       display: none;
     }
-    .feedback-box .fb-title {
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
     .feedback-box.correct {
       border-left-color: #8baa7a;
       background: #f0f5eb;
@@ -230,10 +221,6 @@
     .btn-secondary:hover {
       background: #d8c9bc;
     }
-    .btn:disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
     .result-summary {
       margin-top: 16px;
       background: #efe7df;
@@ -271,8 +258,13 @@
     .final-feedback strong {
       color: #4d3a2b;
     }
-    .icon-symbol {
-      font-size: 18px;
+    .highlight-box {
+      background: #e8ddd2;
+      padding: 8px 14px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-top: 6px;
+      font-weight: 600;
     }
     @media (max-width: 550px) {
       .container { padding: 16px; }
@@ -282,80 +274,87 @@
   </style>
 </head>
 <body>
-<div class="container" id="app">
-  <h1>
-    <span>🐖</span> КФХ «Хрюшки-Ванюшки»
-  </h1>
-  <div class="subhead">
-    📌 В 2012 году Иван Петрович решил возродить село в глубинке. Для этого он открыл крестьянско-фермерское хозяйство «Хрюшки-Ванюшки». Определите категорию объекта по старому и новому Постановлениям
-  </div>
+<div class="container">
+  <h1><span>ООО «ХимМикс»</h1>
+  <div class="subhead">Интерактивный кейс: определите, что поменялось для объекта по новому Постановлению №636</div>
 
   <!-- Карточка предприятия -->
   <div class="farm-card">
-    <div class="farm-icon">🏠🐷</div>
-    <div class="farm-name">КФХ «Хрюшки-Ванюшки»</div>
-    <div class="farm-badge"><span>🐖</span> 4 800 мест</div>
+    <div class="farm-icon">🎨</div>
+    <div class="farm-name">ООО «ХимМикс»</div>
+    <div class="farm-badge"><span>⚗️</span> Смешение без реакций</div>
     <div class="farm-stats">
-      <span>📅 введён в 2012 г.</span>
-      <span>💨 выбросы &lt; 10 т/год</span>
-      <span>💧 сбросы в реку (есть)</span>
-      <span>🧪 веществ I–II кл. — нет</span>
+      <span> ООО «ХимМикс» производит водоэмульсионные краски: смешивает готовые компоненты без химических реакций.<br>
+        Компоненты смешивают в чанах при температуре +35°C, затем разливают в канистры и упаковывают. Сбросы соотвествуют нормативам, выбросы минимальные.</span>
     </div>
   </div>
 
-  <!-- ========== ЧАСТЬ 1 (старый закон) ========== -->
+  <!-- ===== ЧАСТЬ 1 ===== -->
   <div style="margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
     <span style="font-weight: 600; color: #5e4b3a;">📜 Часть 1. Постановление № 2398 (старое)</span>
-    <span style="font-size: 13px; color: #8a7a6a;">→ определите категорию по старому закону</span>
   </div>
 
   <!-- Вопрос 1 -->
   <div class="question-block" id="q1">
-    <div class="q-title"><span>1</span> Критерии I категории (п. 1, подп. 21)</div>
+    <div class="q-title"><span>1</span> Походит для ООО «ХимМикс» описание производста в разделе I старого постановления.</div>
     <div class="q-fragment">
-      <strong>«с проектной мощностью 42 тыс. мест и более для свиней массой тела более 30 кг (для объектов, введённых после 1 января 2005 г.)»</strong>
+      В разделе I указаны:<br>
+      <strong>• производство химических веществ и химических продуктов следующих основных органических химических веществ: синтетические красители и пигменты (п. 9)</strong><br>
     </div>
     <div class="options" data-q="1">
-      <label><input type="radio" name="q1" value="yes"> Да, подходит</label>
-      <label><input type="radio" name="q1" value="no"> Нет, не подходит</label>
+      <label><input type="radio" name="q1" value="yes"> Не подходит</label>
+      <label><input type="radio" name="q1" value="no"> Подходит</label>
     </div>
     <div class="feedback-box" id="fb1"></div>
   </div>
 
   <!-- Вопрос 2 -->
   <div class="question-block" id="q2">
-    <div class="q-title"><span>2</span> Есть ли свиньи в разделе II (старая редакция)?</div>
+    <div class="q-title"><span>2</span> Категория ООО «ХимМикс» по Постановлению № 2398?</div>
     <div class="q-fragment">
-      В разделе II были указаны: птица, КРС, очистка сточных вод централизованных систем.<br>
-      <strong>Про свиней — ни слова.</strong>
+      <strong>ООО «ХимМикс»:</strong> покупает готовые вещества → смешивает механически → фасует.<br>
+      Никаких химических реакций, нагрев до +35°C.
     </div>
     <div class="options" data-q="2">
-      <label><input type="radio" name="q2" value="yes"> Да, есть</label>
-      <label><input type="radio" name="q2" value="no"> Нет, не указаны</label>
+      <label><input type="radio" name="q2" value="I"> I категория</label>
+      <label><input type="radio" name="q2" value="II"> II категория</label>
+      <label><input type="radio" name="q2" value="III"> III категория</label>
+      <label><input type="radio" name="q2" value="IV"> IV категория</label>
     </div>
     <div class="feedback-box" id="fb2"></div>
   </div>
 
+  <div class="divider"></div>
+
+  <!-- ===== ЧАСТЬ 2 ===== -->
+  <div style="margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+    <span style="font-weight: 600; color: #5e4b3a;">📜 Часть 2. Постановление № 636 (новое)</span>
+  </div>
+
   <!-- Вопрос 3 -->
   <div class="question-block" id="q3">
-    <div class="q-title"><span>3</span> Подходит ли ферма под IV категорию?</div>
+    <div class="q-title"><span>3</span> Действует ли исключение в новом законе для ООО «ХимМикс»?</div>
     <div class="q-fragment">
-      Для IV категории нужно <strong>одновременное</strong> выполнение условий:<br>
-      • выбросы &lt; 10 т/год и нет веществ I–II кл.<br>
-      • <strong>отсутствие сбросов в окружающую среду</strong>
+      В Постановлении № 636 <strong>добавлено</strong> следующее положение:<br><br>
+      <em>«Деятельность по производству ... химических веществ ... <strong>НЕ относится к I категории</strong>, 
+      если она осуществляется исключительно путём растворения, эмульгирования, смешения, сушки 
+      или иных механических процессов <strong>БЕЗ использования химических реакций или нагрева выше 130°C</strong>»</em>
     </div>
     <div class="options" data-q="3">
-      <label><input type="radio" name="q3" value="yes"> Да, подходит</label>
-      <label><input type="radio" name="q3" value="no"> Нет, не подходит</label>
+      <label><input type="radio" name="q3" value="yes"> Да, исключение действует</label>
+      <label><input type="radio" name="q3" value="no"> Нет, для ООО «ХимМикс» ничего не изменилось</label>
     </div>
     <div class="feedback-box" id="fb3"></div>
   </div>
 
-  <!-- Вопрос 4 (итог по части 1) -->
+  <!-- Вопрос 4 -->
   <div class="question-block" id="q4">
-    <div class="q-title"><span>4</span> Категория КФХ по Постановлению № 2398?</div>
+    <div class="q-title"><span>4</span> Категория ООО «ХимМикс» по Постановлению № 636?</div>
     <div class="q-fragment">
-      Если объект <strong>не подходит под I, II и IV</strong> категории, он попадает в III как <em>«деятельность, не указанная в разделах I, II и IV»</em> (п. 6, подп. 5).
+      <strong>Напомним, что в ООО «ХимМикс»:<br>
+      ✅ используют только механические процессы<br>
+      ✅ нет химических реакций<br>
+      ✅ нагрев до +35°C (менее 130°C)
     </div>
     <div class="options" data-q="4">
       <label><input type="radio" name="q4" value="I"> I категория</label>
@@ -366,39 +365,14 @@
     <div class="feedback-box" id="fb4"></div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- ========== ЧАСТЬ 2 (новый закон) ========== -->
-  <div style="margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-    <span style="font-weight: 600; color: #5e4b3a;">📋 Часть 2. Постановление № 636 (новое)</span>
-    <span style="font-size: 13px; color: #8a7a6a;">→ определите новую категорию</span>
-  </div>
-
-  <!-- Вопрос 5 -->
-  <div class="question-block" id="q5">
-    <div class="q-title"><span>5</span> Что изменилось в разделе II? (п. 2, подп. 12)</div>
-    <div class="q-fragment">
-      <strong>Добавлен</strong> вид деятельности:<br>
-      <em>«по выращиванию и разведению свиней массой тела более 30 кг (за исключением деятельности, указанной в подпункте 21 пункта 1)»</em><br><br>
-      Это означает, что КФХ «Хрюшки-Ванюшки» теперь
-    </div>
-    <div class="options" data-q="5">
-      <label><input type="radio" name="q5" value="I"> I категория</label>
-      <label><input type="radio" name="q5" value="II"> II категория</label>
-      <label><input type="radio" name="q5" value="III"> III категория</label>
-      <label><input type="radio" name="q5" value="IV"> IV категория</label>
-    </div>
-    <div class="feedback-box" id="fb5"></div>
-  </div>
-
-  <!-- Кнопки и результат -->
+  <!-- Кнопки -->
   <div class="btn-group">
     <button class="btn btn-primary" id="checkBtn"><span>✅</span> Проверить ответы</button>
     <button class="btn btn-secondary" id="resetBtn"><span>🔄</span> Пройти заново</button>
   </div>
 
-  <div class="result-summary" id="resultSummary">
-    <span>📊</span> Правильных ответов: <span id="scoreDisplay">0</span> из 5
+  <div class="result-summary">
+    <span>📊</span> Правильных ответов: <span id="scoreDisplay">0</span> из 4
   </div>
 
   <div class="final-feedback" id="finalFeedback"></div>
@@ -406,45 +380,35 @@
 
 <script>
   (function() {
-    // ---------- данные для обратной связи по каждому вопросу ----------
     const feedbackData = {
       1: {
         correct: 'no',
-        correctMsg: '✅ Верно! Мощность 4 800 мест < 42 000, поэтому ферма НЕ подходит под I категорию.',
-        incorrectMsg: '❌ Неверно. Для объектов после 2005 года порог I категории — 42 тыс. мест. У фермы только 4 800 мест,所以她 не попадает в I категорию.'
+        correctMsg: '✅ Верно! В старом законе (№ 2398) нет исключений: любое производство химических веществ автоматически относится к I категории.',
+        incorrectMsg: '❌ Неверно. В Постановлении № 2398 любое производство химических веществ (п. 9, 10 раздела I) — это I категория.'
       },
       2: {
-        correct: 'no',
-        correctMsg: '✅ Правильно! В старом разделе II свиней не было — только птица и КРС. Поэтому ферма не могла быть II категории.',
-        incorrectMsg: '❌ Ошибка. В Постановлении № 2398 в разделе II действительно НЕТ свиней. Их добавили только в новом законе.'
+        correct: 'I',
+        correctMsg: '🎯 Совершенно верно! По старому закону ООО «ХимМикс» — I категория. Даже без химических реакций, одно лишь производство химических веществ автоматически относило объект к I категории.',
+        incorrectMsg: '❌ Неверно. В старом законе (№ 2398) отсутствовали исключения для производств без химических реакций. Поэтому даже простое смешение готовых веществ относилось к I категории.'
       },
       3: {
-        correct: 'no',
-        correctMsg: '✅ Верно! У фермы есть сбросы в реку, а для IV категории требуется их отсутствие. Поэтому IV категория не подходит.',
-        incorrectMsg: '❌ Неверно. Для IV категории нужно ОТСУТСТВИЕ сбросов в окружающую среду. У фермы сбросы есть, значит, она не может быть IV категории.'
+        correct: 'yes',
+        correctMsg: '✅ Да! В новом законе появилось важное исключение: если производство идёт только механическими способами (смешение, растворение и т.п.) без нагрева выше 130°C — оно НЕ относится к I категории.',
+        incorrectMsg: '❌ Неверно. В Постановлении № 636 добавили исключение для механических процессов без химических реакций и нагрева выше 130°C.'
       },
       4: {
-        correct: 'III',
-        correctMsg: '✅ Абсолютно верно! Ферма не подошла под I (мало мест), не подошла под II (свиней нет в списке), не подошла под IV (есть сбросы) → попала в «корзину» III категории как неуказанная деятельность.',
-        incorrectMsg: '❌ Неверно. Давайте по порядку: I — нет (мощность < 42 000); II — нет (свиней не было в разделе); IV — нет (есть сбросы). Остаётся только III категория как «деятельность, не указанная в разделах I, II и IV».'
-      },
-      5: {
         correct: 'II',
-        correctMsg: '🎉 Отлично! В новом законе свиней добавили в раздел II. Поскольку ферма не попала в I категорию (мощность < 42 000), она теперь относится ко II категории. Это и есть ключевое изменение!',
-        incorrectMsg: '❌ Неверно. В новом законе (№ 636) в разделе II появился пункт про свиней. Все фермы, которые не подходят под I категорию (мощность < 42 000), теперь относятся ко II. У нашей фермы 4 800 мест, значит, она — II категория.'
+        correctMsg: '🎉 Отлично! «ХимМикс» подходит под новое исключение: только механические процессы, без реакций, нагрев ≤ +40°C (< 130°C). Значит, он переезжает из I во II категорию.',
+        incorrectMsg: '❌ Неверно. «ХимМикс» полностью соответствует новому исключению: механические процессы, без химических реакций, нагрев ниже 130°C. Поэтому он выходит из I категории и становится II.'
       }
     };
 
-    // ---------- DOM-элементы ----------
     const checkBtn = document.getElementById('checkBtn');
     const resetBtn = document.getElementById('resetBtn');
     const scoreSpan = document.getElementById('scoreDisplay');
     const finalFeedback = document.getElementById('finalFeedback');
+    const questionIds = [1, 2, 3, 4];
 
-    // Массив ID вопросов
-    const questionIds = [1, 2, 3, 4, 5];
-
-    // ---------- функции ----------
     function getSelectedValue(qId) {
       const radios = document.querySelectorAll(`input[name="q${qId}"]`);
       for (let r of radios) {
@@ -465,7 +429,6 @@
     }
 
     function resetAll() {
-      // сброс радиокнопок
       document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
       clearFeedback();
       scoreSpan.textContent = '0';
@@ -481,18 +444,14 @@
     }
 
     function checkAll() {
-      // сначала сбросим старые фидбеки
       clearFeedback();
-
       let correctCount = 0;
       let allAnswered = true;
 
-      // проверяем каждый вопрос
       questionIds.forEach(id => {
         const val = getSelectedValue(id);
         if (val === null) {
           allAnswered = false;
-          // показываем мягкое напоминание в фидбеке
           const fb = document.getElementById(`fb${id}`);
           fb.innerHTML = '⚠️ Пожалуйста, выберите один из вариантов.';
           fb.className = 'feedback-box show';
@@ -501,48 +460,45 @@
           fb.style.background = '#faf3ea';
           return;
         }
-
         const isCorrect = (val === feedbackData[id].correct);
         if (isCorrect) correctCount++;
         showFeedback(id, isCorrect);
       });
 
-      // если не все отвечены — не считаем итоговым
       if (!allAnswered) {
         scoreSpan.textContent = '?';
         finalFeedback.style.display = 'none';
         return;
       }
 
-      // обновляем счёт
-      scoreSpan.textContent = correctCount + ' из 5';
+      scoreSpan.textContent = correctCount + ' из 4';
 
-      // итоговая обратная связь
       let finalMsg = '';
-      if (correctCount === 5) {
+      if (correctCount === 4) {
         finalMsg = `
-          <strong>🌟 Поздравляем! Все 5 ответов верны!</strong><br>
-          Вы правильно определили, что по старому закону ферма была III категорией, а по новому стала II. 
-          Ключевое изменение: в Постановлении № 636 свиней добавили в раздел II, поэтому все фермы, 
-          не попавшие в I категорию (мощность < 42 000 мест), теперь относятся ко II категории.
-          Обратите внимание: наличие сбросов не позволило ферме стать IV категорией — это важное условие!
+          <strong>🌟 Поздравляем! Все 4 ответа верны!</strong><br><br>
+          <strong>Ключевой вывод:</strong><br>
+          • По старому закону (№ 2398) ООО «ХимМикс» был <strong>I категории</strong> — исключений не было.<br>
+          • По новому закону (№ 636) появилось исключение для механических процессов 
+            <strong>без химических реакций и нагрева выше 130°C</strong>.<br>
+          • «ХимМикс» подходит под это исключение → переезжает из <strong>I во II категорию</strong>.<br><br>
+          <span class="highlight-box">🎯 Это и есть реальное изменение, которое внёс новый закон!</span>
         `;
-      } else if (correctCount >= 3) {
+      } else if (correctCount >= 2) {
         finalMsg = `
-          <strong>👍 Хороший результат! ${correctCount} из 5.</strong><br>
-          Проверьте вопросы, где были ошибки. Обратите особое внимание на:<br>
-          • пороги мощности для I категории (42 000 мест для объектов после 2005 г.);<br>
-          • наличие сбросов — это «стоп-флаг» для IV категории;<br>
-          • главное нововведение: свиньи появились в разделе II, и теперь они «переезжают» из III во II.
+          <strong>👍 Хороший результат! ${correctCount} из 4.</strong><br><br>
+          Ключевые моменты:<br>
+          • В старом законе <strong>НЕ БЫЛО</strong> исключений — «ХимМикс» был в I категории.<br>
+          • В новом законе <strong>ПОЯВИЛОСЬ</strong> исключение для механических процессов без реакций и нагрева >130°C.<br>
+          • «ХимМикс» подходит под исключение → становится II категорией.
         `;
       } else {
         finalMsg = `
-          <strong>📖 Попробуйте ещё раз внимательно прочитать закон.</strong><br>
-          Ключевые моменты:<br>
-          • I категория: нужна мощность ≥ 42 000 мест (у фермы только 4 800);<br>
-          • IV категория: требует ОТСУТСТВИЯ сбросов (у фермы они есть);<br>
-          • В старом законе свиней в разделе II НЕ БЫЛО — поэтому ферма была в III;<br>
-          • В новом законе свиней ДОБАВИЛИ в раздел II — поэтому ферма стала II категории.
+          <strong>📖 Внимательно перечитайте фрагменты законов.</strong><br><br>
+          <strong>Главное изменение:</strong><br>
+          • Старый закон (№ 2398): любое производство химии = I категория (без исключений).<br>
+          • Новый закон (№ 636): механические процессы без реакций и нагрева >130°C = НЕ I категория.<br>
+          • «ХимМикс» → только смешение, без реакций, +40°C → <strong>II категория</strong>.
         `;
       }
       finalFeedback.innerHTML = finalMsg;
@@ -550,19 +506,14 @@
       finalFeedback.style.display = 'block';
     }
 
-    // ---------- слушатели ----------
     checkBtn.addEventListener('click', checkAll);
-
     resetBtn.addEventListener('click', function() {
       resetAll();
-      // дополнительно сбросим итоговый фидбек
       finalFeedback.className = 'final-feedback';
       finalFeedback.style.display = 'none';
     });
 
-    // при загрузке страницы всё чисто
     resetAll();
-
   })();
 </script>
 </body>
