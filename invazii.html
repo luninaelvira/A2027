@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инвазивные виды: пошаговый тест</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+        }
+
+        body {
+            background: #faf3f0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 820px;
+            width: 100%;
+            background: rgba(255, 250, 245, 0.7);
+            backdrop-filter: blur(2px);
+            border-radius: 48px;
+            padding: 30px 30px 40px;
+            box-shadow: 0 12px 40px rgba(200, 170, 160, 0.25);
+            border: 1px solid #f0e3dd;
+        }
+
+        /* прогресс-бар */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+            padding: 0 6px;
+        }
+
+        .progress-steps {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .step-dot {
+            flex: 1;
+            height: 6px;
+            border-radius: 10px;
+            background: #e5d3cb;
+            transition: 0.4s ease;
+        }
+
+        .step-dot.active {
+            background: #b29082;
+        }
+
+        .step-dot.done {
+            background: #9bbf8f;
+        }
+
+        .progress-text {
+            font-size: 0.95rem;
+            color: #b19489;
+            font-weight: 400;
+            white-space: nowrap;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 350;
+            color: #7b5e55;
+            letter-spacing: -0.3px;
+            text-align: center;
+            border-bottom: 2px dashed #e5d3cb;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        h1 span {
+            background: #f2e1da;
+            padding: 0 14px;
+            border-radius: 40px;
+            font-weight: 300;
+        }
+
+        /* карточка вопроса — скрыта по умолчанию */
+        .question-card {
+            display: none;
+            background: #fffbf9;
+            border-radius: 32px;
+            padding: 28px 28px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(190, 160, 150, 0.12);
+            border: 1px solid #f0e3dd;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .question-card.visible {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(18px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .plant-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .plant-avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 28px;
+            background: #f4e8e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 3px solid #ffe8df;
+        }
+
+        .plant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .plant-avatar .emoji-big {
+            font-size: 3.2rem;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+        }
+
+        .plant-title {
+            flex: 1;
+        }
+
+        .plant-title h2 {
+            font-size: 1.7rem;
+            font-weight: 350;
+            color: #5a4a43;
+            margin-bottom: 2px;
+        }
+
+        .plant-title .scientific {
+            font-size: 0.95rem;
+            color: #b19489;
+            font-style: italic;
+            background: #f5ece7;
+            padding: 2px 16px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .question-number {
+            background: #ede0d9;
+            color: #7b5e55;
+            border-radius: 40px;
+            padding: 4px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            color: #4d3f3a;
+            background: #fcf6f2;
+            padding: 14px 20px;
+            border-radius: 24px;
+            margin: 12px 0 20px 0;
+            border-left: 8px solid #edd9d0;
+            font-weight: 350;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0 12px;
+        }
+
+        .option {
+            background: #fcf6f2;
+            border-radius: 60px;
+            padding: 10px 22px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #3f3531;
+            font-size: 1.02rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+        }
+
+        .option:hover:not(.disabled) {
+            background: #f8eee9;
+            border-color: #dfcbc2;
+            transform: scale(1.01);
+        }
+
+        .option.disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .option input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cfb9b0;
+            border-radius: 50%;
+            transition: 0.15s;
+            position: relative;
+            flex-shrink: 0;
+            background: white;
+            cursor: pointer;
+        }
+
+        .option input[type="radio"]:checked {
+            border-color: #b29082;
+            background: #b29082;
+        }
+
+        .option input[type="radio"]:checked::after {
+            content: "";
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .option input[type="radio"]:disabled {
+            cursor: default;
+            opacity: 0.5;
+        }
+
+        .option-label {
+            flex: 1;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .option.disabled .option-label {
+            cursor: default;
+        }
+
+        /* кнопки */
+        .actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .btn {
+            border: none;
+            padding: 11px 32px;
+            border-radius: 60px;
+            font-size: 1.05rem;
+            font-weight: 450;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-check {
+            background: #dccbc2;
+            color: #4b3e39;
+            border-color: #eee0d8;
+            box-shadow: 0 2px 8px rgba(160, 130, 120, 0.15);
+        }
+
+        .btn-check:hover:not(:disabled) {
+            background: #d0bbb0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(160, 130, 120, 0.25);
+        }
+
+        .btn-check:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-next {
+            background: #b5cfb0;
+            color: #2f4d2f;
+            border-color: #d4e6cf;
+            box-shadow: 0 2px 8px rgba(130, 170, 120, 0.15);
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: #a3c09d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(130, 170, 120, 0.25);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-restart {
+            background: #f0e3dd;
+            color: #5a4a43;
+            border-color: #e5d3cb;
+        }
+
+        .btn-restart:hover {
+            background: #e5d3cb;
+            transform: translateY(-2px);
+        }
+
+        /* фидбек */
+        .feedback {
+            margin-top: 20px;
+            padding: 18px 22px;
+            border-radius: 28px;
+            font-size: 1rem;
+            line-height: 1.6;
+            border-left: 8px solid transparent;
+            background: #fcf6f2;
+            transition: all 0.25s ease;
+            display: none;
+            color: #2f2926;
+        }
+
+        .feedback.correct {
+            display: block;
+            background: #eaf5ea;
+            border-left-color: #7fb07f;
+            box-shadow: 0 2px 10px rgba(120, 180, 120, 0.1);
+        }
+
+        .feedback.wrong {
+            display: block;
+            background: #fceeec;
+            border-left-color: #dba59e;
+            box-shadow: 0 2px 10px rgba(200, 130, 120, 0.08);
+        }
+
+        .feedback .fb-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .feedback .fb-detail {
+            margin-top: 6px;
+            opacity: 0.92;
+        }
+
+        /* финальный экран */
+        .final-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px 20px;
+            animation: fadeSlide 0.5s ease;
+        }
+
+        .final-screen.visible {
+            display: block;
+        }
+
+        .final-screen .trophy {
+            font-size: 4rem;
+            margin-bottom: 12px;
+        }
+
+        .final-screen h2 {
+            font-size: 2rem;
+            font-weight: 350;
+            color: #5a4a43;
+            margin-bottom: 8px;
+        }
+
+        .final-screen .score {
+            font-size: 1.3rem;
+            color: #7b5e55;
+            background: #f5ece7;
+            display: inline-block;
+            padding: 6px 32px;
+            border-radius: 60px;
+            margin: 8px 0 16px;
+        }
+
+        .final-screen .final-message {
+            color: #4d3f3a;
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+        }
+
+        .extra-note {
+            margin-top: 30px;
+            padding: 18px 24px;
+            background: #f5ede8;
+            border-radius: 40px;
+            color: #5a4a43;
+            font-style: italic;
+            border: 1px solid #e5d3cb;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        /* адаптив */
+        @media (max-width: 600px) {
+            .container { padding: 18px 14px; }
+            .plant-header { flex-direction: column; align-items: flex-start; }
+            .plant-avatar { width: 65px; height: 65px; }
+            .plant-title h2 { font-size: 1.3rem; }
+            .question-text { font-size: 1rem; }
+            .option { font-size: 0.92rem; padding: 8px 16px; }
+            .actions { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🌿 <span>Знай врага</span> · метод борьбы</h1>
+
+    <!-- Прогресс -->
+    <div class="progress-wrapper">
+        <div class="progress-steps" id="progressSteps">
+            <div class="step-dot active" data-step="0"></div>
+            <div class="step-dot" data-step="1"></div>
+            <div class="step-dot" data-step="2"></div>
+            <div class="step-dot" data-step="3"></div>
+        </div>
+        <span class="progress-text" id="progressText">1 / 4</span>
+    </div>
+
+    <!-- ===== ВОПРОС 1 ===== -->
+    <div class="question-card visible" data-index="0" id="q0">
+        <div class="plant-header">
+            <div class="plant-avatar">
+                <img src="борщевик.jpg" alt="Борщевик" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'emoji-big\'>🌱</span>';">
+            </div>
+            <div class="plant-title">
+                <h2>Борщевик Сосновского</h2>
+                <span class="scientific">Heracleum sosnowskyi</span>
+            </div>
+            <span class="question-number">Вопрос 1</span>
+        </div>
+        <div class="question-text">
+            ⚔️ Какой метод считается <strong>самым эффективным</strong> для уничтожения борщевика?
+        </div>
+        <div class="options" data-question="0">
+            <label class="option">
+                <input type="radio" name="q0" value="0"> 
+                <span class="option-label">А) Скашивание вручную дважды за сезон</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q0" value="1"> 
+                <span class="option-label">Б) Опрыскивание системным гербицидом (глифосат)</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q0" value="2"> 
+                <span class="option-label">В) Укрытие чёрной плёнкой на 2 месяца</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q0" value="3"> 
+                <span class="option-label">Г) Полив кипятком и уксусом под корень</span>
+            </label>
+        </div>
+        <div class="actions">
+            <button class="btn btn-check" data-target="0">✅ Проверить</button>
+            <button class="btn btn-next" data-next="1" disabled>➡️ Следующий вопрос</button>
+        </div>
+        <div class="feedback" id="feedback-0"></div>
+    </div>
+
+    <!-- ===== ВОПРОС 2 ===== -->
+    <div class="question-card" data-index="1" id="q1">
+        <div class="plant-header">
+            <div class="plant-avatar">
+                <img src="элодея.jpg" alt="Элодея" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'emoji-big\'>🌊</span>';">
+            </div>
+            <div class="plant-title">
+                <h2>Элодея канадская</h2>
+                <span class="scientific">Elodea canadensis</span>
+            </div>
+            <span class="question-number">Вопрос 2</span>
+        </div>
+        <div class="question-text">
+            ⚔️ Почему <strong>полное ручное удаление</strong> с корнями — лучший способ против элодеи?
+        </div>
+        <div class="options" data-question="1">
+            <label class="option">
+                <input type="radio" name="q1" value="0"> 
+                <span class="option-label">А) Потому что она боится солнечного света</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q1" value="1"> 
+                <span class="option-label">Б) Чтобы не стимулировать рост из фрагментов; срезка даёт новые побеги</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q1" value="2"> 
+                <span class="option-label">В) Это самый дешёвый способ для больших водоёмов</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q1" value="3"> 
+                <span class="option-label">Г) Химия запрещена во всех странах мира</span>
+            </label>
+        </div>
+        <div class="actions">
+            <button class="btn btn-check" data-target="1">✅ Проверить</button>
+            <button class="btn btn-next" data-next="2" disabled>➡️ Следующий вопрос</button>
+        </div>
+        <div class="feedback" id="feedback-1"></div>
+    </div>
+
+    <!-- ===== ВОПРОС 3 ===== -->
+    <div class="question-card" data-index="2" id="q2">
+        <div class="plant-header">
+            <div class="plant-avatar">
+                <img src="клен.jpg" alt="Клён ясенелистный" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'emoji-big\'>🍁</span>';">
+            </div>
+            <div class="plant-title">
+                <h2>Клён ясенелистный</h2>
+                <span class="scientific">Acer negundo</span>
+            </div>
+            <span class="question-number">Вопрос 3</span>
+        </div>
+        <div class="question-text">
+            ⚔️ В чём суть метода борьбы с клёном после спиливания дерева?
+        </div>
+        <div class="options" data-question="2">
+            <label class="option">
+                <input type="radio" name="q2" value="0"> 
+                <span class="option-label">А) Обработать пень солью и засыпать землёй</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q2" value="1"> 
+                <span class="option-label">Б) Нанести системный гербицид на свежий срез в течение нескольких часов</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q2" value="2"> 
+                <span class="option-label">В) Просто спилить и оставить пень — поросль не появится</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q2" value="3"> 
+                <span class="option-label">Г) Залить пень кипятком и закрыть плёнкой на год</span>
+            </label>
+        </div>
+        <div class="actions">
+            <button class="btn btn-check" data-target="2">✅ Проверить</button>
+            <button class="btn btn-next" data-next="3" disabled>➡️ Следующий вопрос</button>
+        </div>
+        <div class="feedback" id="feedback-2"></div>
+    </div>
+
+    <!-- ===== ВОПРОС 4 ===== -->
+    <div class="question-card" data-index="3" id="q3">
+        <div class="plant-header">
+            <div class="plant-avatar">
+                <img src="люпин.jpg" alt="Люпин многолистный" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'emoji-big\'>🌸</span>';">
+            </div>
+            <div class="plant-title">
+                <h2>Люпин многолистный</h2>
+                <span class="scientific">Lupinus polyphyllus</span>
+            </div>
+            <span class="question-number">Вопрос 4</span>
+        </div>
+        <div class="question-text">
+            ⚔️ Почему для люпина рекомендуют <strong>кошение триммером с металлическим ножом</strong> после цветения?
+        </div>
+        <div class="options" data-question="3">
+            <label class="option">
+                <input type="radio" name="q3" value="0"> 
+                <span class="option-label">А) Это быстро и не требует усилий</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q3" value="1"> 
+                <span class="option-label">Б) Нож расщепляет корневища и изолирует почки, не давая восстановиться</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q3" value="2"> 
+                <span class="option-label">В) Триммер — единственный разрешённый инструмент для люпина</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="q3" value="3"> 
+                <span class="option-label">Г) Чтобы разбросать семена по участку для удобства</span>
+            </label>
+        </div>
+        <div class="actions">
+            <button class="btn btn-check" data-target="3">✅ Проверить</button>
+            <button class="btn btn-next" data-next="final" disabled>🏁 Завершить тест</button>
+        </div>
+        <div class="feedback" id="feedback-3"></div>
+    </div>
+
+    <!-- ===== ФИНАЛЬНЫЙ ЭКРАН ===== -->
+    <div class="final-screen" id="finalScreen">
+        <div class="trophy">🏆</div>
+        <h2>Тест пройден!</h2>
+        <div class="score" id="finalScore">0 / 4</div>
+        <div class="final-message" id="finalMessage">
+            Отличный результат! Вы хорошо разбираетесь в методах борьбы с инвазивными видами.
+        </div>
+        <button class="btn btn-restart" id="restartBtn">🔄 Пройти заново</button>
+    </div>
+
+    <div class="extra-note">
+        💡 Главный секрет успеха — понять биологию «врага» и бить точно в слабое место: корень, способность к вегетативному размножению или путь распространения семян.
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ===== ДАННЫЕ =====
+        const quizData = {
+            0: { // борщевик
+                correct: 1,
+                correctFeedback: {
+                    title: '✅ Абсолютно верно!',
+                    detail: 'Гербицид на основе глифосата проникает через листья и стебель, распределяется по всему растению и уничтожает корневую систему. Скашивание лишь ослабляет, народные средства убивают только надземную часть, а укрытие плёнкой рискованно и долго.'
+                },
+                wrongFeedbacks: [
+                    { title: '❌ Не совсем так.', detail: 'Скашивание — лишь временная мера. Борщевик отрастает снова, так как корень остаётся жив. Нужно воздействовать на корень системным гербицидом.' },
+                    { title: '✅ Именно!', detail: 'Гербицид работает системно. Другие методы (уксус, кипяток) — это борьба с симптомами, а не с причиной.' },
+                    { title: '❌ Увы, нет.', detail: 'Плёнка может помочь, но стебли могут её прорвать, и метод требует целого сезона. А гербицид действует быстрее и надёжнее.' },
+                    { title: '❌ К сожалению, это не так.', detail: 'Кипяток и уксус не проникают вглубь корня. Борщевик выживет и даст новые побеги. Лучше — системный гербицид.' }
+                ]
+            },
+            1: { // элодея
+                correct: 1,
+                correctFeedback: {
+                    title: '✅ Совершенно верно!',
+                    detail: 'Элодея размножается вегетативно: любой оторванный фрагмент даёт новое растение. Поэтому срезка под водой только стимулирует рост. Полное удаление с корнями — единственный надёжный способ.'
+                },
+                wrongFeedbacks: [
+                    { title: '❌ Нет.', detail: 'Свет — не главное. Элодея прекрасно себя чувствует и при ярком свете, и в тени. Опасность в её фрагментации.' },
+                    { title: '✅ Да, это ключевой момент!', detail: 'Именно из-за способности к регенерации из фрагментов механическая срезка неэффективна. Полное извлечение — лучший выбор.' },
+                    { title: '❌ Неверно.', detail: 'Дешевизна — не аргумент, если метод не работает. Для больших водоёмов используют специальные машины, но принцип тот же: удалить целиком.' },
+                    { title: '❌ Нет.', detail: 'Химия не запрещена везде, но ограничена из-за токсичности. Однако главная причина — в биологии элодеи и её фрагментации.' }
+                ]
+            },
+            2: { // клён
+                correct: 1,
+                correctFeedback: {
+                    title: '✅ Отлично!',
+                    detail: 'Обработка свежего спила системным гербицидом в течение нескольких часов — ключ к успеху. Препарат попадает в проводящие ткани и уничтожает корневую систему, предотвращая обильную поросль.'
+                },
+                wrongFeedbacks: [
+                    { title: '❌ Нет.', detail: 'Соль и народные методы работают слабо и могут навредить почве. Главное — точечное внесение гербицида в свежий срез.' },
+                    { title: '✅ Именно так!', detail: 'Если затянуть с обработкой, ткани пня «затянутся», и гербицид не проникнет к корням. Оперативность — залог успеха.' },
+                    { title: '❌ К сожалению, нет.', detail: 'Простое спиливание почти всегда приводит к появлению новой поросли из пня и корней. Обработка гербицидом обязательна.' },
+                    { title: '❌ Нет.', detail: 'Кипяток и плёнка не дадут нужного эффекта против мощной корневой системы клёна. Нужен гербицид в свежий срез.' }
+                ]
+            },
+            3: { // люпин
+                correct: 1,
+                correctFeedback: {
+                    title: '✅ Верно!',
+                    detail: 'Металлический нож триммера при нескольких подходах расщепляет корневища и изолирует почки возобновления, что ведёт к гибели люпина. Важно делать это после цветения, когда стебли затвердели.'
+                },
+                wrongFeedbacks: [
+                    { title: '❌ Нет.', detail: 'Скорость — не главное. Обычное скашивание не помогает, так как корневища остаются целыми. Важна техника: расщепление корневищ ножом.' },
+                    { title: '✅ Да, именно так!', detail: 'Именно этот механизм — повреждение почек возобновления в корневищах — отличает метод от обычной срезки. Перекопка и гербициды — крайние меры.' },
+                    { title: '❌ Неверно.', detail: 'Ограничений по инструментам нет. Но триммер с ножом выбран не случайно: он режет не только стебель, но и корневище.' },
+                    { title: '❌ Это абсурд.', detail: 'Люпин — инвазивный вид, его семена нужно сдерживать. Кошение после цветения как раз предотвращает распространение семян.' }
+                ]
+            }
+        };
+
+        // ===== СОСТОЯНИЕ =====
+        let currentStep = 0;           // 0..3
+        const totalSteps = 4;
+        let answers = {};             // { questionIndex: selectedOptionIndex }
+        let correctCount = 0;
+        let isAnswered = false;       // для текущего вопроса
+
+        // DOM-элементы
+        const cards = document.querySelectorAll('.question-card');
+        const dots = document.querySelectorAll('.step-dot');
+        const progressText = document.getElementById('progressText');
+        const finalScreen = document.getElementById('finalScreen');
+        const finalScore = document.getElementById('finalScore');
+        const finalMessage = document.getElementById('finalMessage');
+
+        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
+
+        // Показать карточку по индексу
+        function showCard(index) {
+            cards.forEach((card, i) => {
+                card.classList.toggle('visible', i === index);
+            });
+            // Обновить прогресс
+            dots.forEach((dot, i) => {
+                dot.classList.remove('active', 'done');
+                if (i === index) dot.classList.add('active');
+                else if (i < index) dot.classList.add('done');
+            });
+            progressText.textContent = `${index + 1} / ${totalSteps}`;
+            currentStep = index;
+            isAnswered = false;
+
+            // Сбросить состояние кнопок в этой карточке
+            const cardEl = cards[index];
+            const checkBtn = cardEl.querySelector('.btn-check');
+            const nextBtn = cardEl.querySelector('.btn-next');
+            const feedback = cardEl.querySelector('.feedback');
+            const options = cardEl.querySelectorAll('.option');
+
+            // Включить всё, сбросить фидбек
+            checkBtn.disabled = false;
+            nextBtn.disabled = true;
+            feedback.className = 'feedback';
+            feedback.style.display = 'none';
+            feedback.innerHTML = '';
+
+            // Включить радиокнопки и убрать блокировку
+            options.forEach(opt => {
+                opt.classList.remove('disabled');
+                const radio = opt.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.disabled = false;
+                    radio.checked = false;
+                }
+                opt.style.background = '';
+                opt.style.borderColor = 'transparent';
+            });
+
+            // Если для этого вопроса уже был ответ (при возврате) — восстановить?
+            // Но по логике мы не возвращаемся, поэтому просто сбрасываем.
+        }
+
+        // Показать финальный экран
+        function showFinal() {
+            cards.forEach(c => c.classList.remove('visible'));
+            finalScreen.classList.add('visible');
+            dots.forEach(d => d.classList.add('done'));
+            progressText.textContent = '🏁';
+
+            // Подсчёт правильных
+            correctCount = 0;
+            for (let i = 0; i < totalSteps; i++) {
+                if (answers[i] !== undefined && answers[i] === quizData[i].correct) {
+                    correctCount++;
+                }
+            }
+            finalScore.textContent = `${correctCount} / ${totalSteps}`;
+
+            let msg = '';
+            if (correctCount === 4) msg = '🌟 Идеально! Вы настоящий эксперт по инвазивным видам!';
+            else if (correctCount === 3) msg = '👍 Отлично! Почти всё верно, вы хорошо усвоили материал.';
+            else if (correctCount === 2) msg = '📖 Неплохо! Перечитайте подсказки по слабым местам каждого вида.';
+            else msg = '🌱 Стоит повторить. Вспомните: главное — бить в корень или способ размножения.';
+            finalMessage.textContent = msg;
+        }
+
+        // Перезапуск
+        function restartQuiz() {
+            finalScreen.classList.remove('visible');
+            answers = {};
+            correctCount = 0;
+            isAnswered = false;
+            // Показать первый вопрос
+            showCard(0);
+        }
+
+        // ===== ОБРАБОТЧИК ПРОВЕРКИ =====
+        function handleCheck(questionIndex) {
+            const card = cards[questionIndex];
+            const options = card.querySelectorAll('.option');
+            const feedback = card.querySelector(`#feedback-${questionIndex}`);
+            const checkBtn = card.querySelector('.btn-check');
+            const nextBtn = card.querySelector('.btn-next');
+            const data = quizData[questionIndex];
+
+            // Найти выбранный
+            let selectedIndex = -1;
+            options.forEach((opt, idx) => {
+                const radio = opt.querySelector('input[type="radio"]');
+                if (radio && radio.checked) {
+                    selectedIndex = idx;
+                }
+            });
+
+            if (selectedIndex === -1) {
+                alert('Пожалуйста, выберите один из вариантов.');
+                return;
+            }
+
+            // Запоминаем ответ
+            answers[questionIndex] = selectedIndex;
+
+            const isCorrect = (selectedIndex === data.correct);
+            let title, detail;
+
+            if (isCorrect) {
+                title = data.correctFeedback.title;
+                detail = data.correctFeedback.detail;
+                feedback.className = 'feedback correct';
+            } else {
+                const wrong = data.wrongFeedbacks[selectedIndex] || data.wrongFeedbacks[0];
+                title = wrong.title;
+                detail = wrong.detail;
+                feedback.className = 'feedback wrong';
+            }
+
+            feedback.innerHTML = `
+                <div class="fb-title">${title}</div>
+                <div class="fb-detail">${detail}</div>
+            `;
+            feedback.style.display = 'block';
+
+            // Подсветка вариантов
+            options.forEach((opt, idx) => {
+                const radio = opt.querySelector('input[type="radio"]');
+                // Блокируем все радио
+                if (radio) radio.disabled = true;
+                opt.classList.add('disabled');
+
+                if (idx === data.correct) {
+                    opt.style.background = '#dff0d8';
+                    opt.style.borderColor = '#8bc34a';
+                } else if (radio && radio.checked && idx !== data.correct) {
+                    opt.style.background = '#fce4e0';
+                    opt.style.borderColor = '#e8837a';
+                } else {
+                    opt.style.background = '';
+                    opt.style.borderColor = 'transparent';
+                }
+            });
+
+            // Отключаем кнопку проверки, включаем следующую
+            checkBtn.disabled = true;
+            nextBtn.disabled = false;
+            isAnswered = true;
+        }
+
+        // ===== ПЕРЕХОД К СЛЕДУЮЩЕМУ ВОПРОСУ =====
+        function goToNext(nextIndex) {
+            if (nextIndex === 'final') {
+                showFinal();
+            } else {
+                showCard(nextIndex);
+            }
+        }
+
+        // ===== НАВЕШИВАЕМ ОБРАБОТЧИКИ =====
+
+        // Кнопки "Проверить"
+        document.querySelectorAll('.btn-check').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const target = parseInt(this.dataset.target);
+                if (!isNaN(target)) {
+                    handleCheck(target);
+                }
+            });
+        });
+
+        // Кнопки "Следующий вопрос"
+        document.querySelectorAll('.btn-next').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const next = this.dataset.next;
+                if (next === 'final') {
+                    goToNext('final');
+                } else {
+                    const idx = parseInt(next);
+                    if (!isNaN(idx) && idx < totalSteps) {
+                        goToNext(idx);
+                    }
+                }
+            });
+        });
+
+        // Кнопка перезапуска
+        document.getElementById('restartBtn').addEventListener('click', restartQuiz);
+
+        // Дополнительно: если переключили радио после того, как ответили — сбросить состояние (но мы блокируем)
+        // Также можно при клике на радио убирать старый фидбек, но это не критично
+
+        // Старт
+        showCard(0);
+    })();
+</script>
+</body>
+</html>
