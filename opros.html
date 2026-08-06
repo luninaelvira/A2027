@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Оценка защищённости ОПО</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: white;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            margin: 0;
+        }
+        .card {
+            width: 100%;
+            max-width: 700px;
+            height: 100vh;
+            max-height: 560px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -10px rgba(0, 40, 70, 0.15);
+            padding: 18px 22px 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(60, 130, 180, 0.12);
+        }
+        /* Голубо-синяя тема */
+        .card {
+            background: white;
+        }
+        h1 {
+            font-size: clamp(1.3rem, 3.2vw, 1.8rem);
+            font-weight: 600;
+            color: #0b3b5e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        h1 span:first-child {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        h1 span:last-child {
+            background: #d9e8f5;
+            padding: 0 16px;
+            border-radius: 40px;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+            font-weight: 500;
+            color: #1a5a7a;
+            white-space: nowrap;
+        }
+        .subhead {
+            font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+            color: #2c6a8a;
+            margin-bottom: 10px;
+            padding-left: 14px;
+            border-left: 3px solid #4a90b5;
+            background: rgba(70, 140, 190, 0.04);
+            border-radius: 0 8px 8px 0;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            flex: 1;
+            min-height: 0;
+        }
+        .block {
+            background: rgba(245, 250, 255, 0.6);
+            border-radius: 18px;
+            padding: 12px 14px 14px;
+            border: 1px solid rgba(70, 150, 200, 0.12);
+            box-shadow: 0 4px 12px rgba(40, 110, 160, 0.04);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .block h2 {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 600;
+            color: #0b3b5e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px dashed #c5dcee;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .block h2 span {
+            background: #d9e8f5;
+            border-radius: 30px;
+            padding: 0 12px;
+            font-size: clamp(0.55rem, 1.1vw, 0.7rem);
+            font-weight: 500;
+            color: #1a5a7a;
+        }
+        .slider-group {
+            margin-bottom: 5px;
+            flex-shrink: 0;
+        }
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+            color: #1a4a6a;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+            margin-bottom: 2px;
+        }
+        .slider-group label small {
+            font-weight: 400;
+            color: #3a7a9a;
+            background: #e5f0f8;
+            padding: 0 10px;
+            border-radius: 20px;
+            font-size: clamp(0.55rem, 1.1vw, 0.75rem);
+        }
+        .slider-wrapper {
+            position: relative;
+            padding-top: 20px;
+        }
+        .slider-value {
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f6a8a;
+            color: white;
+            font-weight: 600;
+            font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+            padding: 0 14px;
+            border-radius: 30px;
+            min-width: 34px;
+            text-align: center;
+            box-shadow: 0 3px 8px rgba(20, 80, 120, 0.2);
+            pointer-events: none;
+            white-space: nowrap;
+            transition: left 0.03s ease;
+            line-height: 1.8;
+        }
+        input[type=range] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, #9ac2db, #3a8ab5);
+            border-radius: 10px;
+            outline: none;
+            margin: 4px 0 2px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 3px 10px rgba(10, 60, 100, 0.2);
+            border: 2.5px solid #1f6a8a;
+            cursor: pointer;
+            transition: 0.06s;
+            position: relative;
+            z-index: 2;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            background: #f5faff;
+            transform: scale(1.06);
+        }
+        input[type=range]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 30px;
+            border: 2.5px solid #1f6a8a;
+            cursor: pointer;
+        }
+        .scale-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: clamp(0.5rem, 1vw, 0.65rem);
+            color: #3a7a9a;
+            padding: 0 4px;
+            margin-top: -2px;
+        }
+        .indicator {
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #e5f0f8;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+            color: #1a5a7a;
+            flex-shrink: 0;
+            min-height: 28px;
+        }
+        .indicator .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 20px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .summary {
+            background: #0b3b5e;
+            border-radius: 18px;
+            padding: 10px 16px;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin: 8px 0 5px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+            gap: 4px;
+        }
+        .summary .level {
+            font-size: clamp(1.2rem, 2.8vw, 1.7rem);
+            font-weight: 700;
+            background: rgba(255,255,255,0.08);
+            padding: 0 16px;
+            border-radius: 40px;
+        }
+        .summary .desc {
+            font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+            opacity: 0.92;
+            max-width: 220px;
+        }
+        .summary .badge {
+            background: #f5b042;
+            color: #1a2e3b;
+            padding: 3px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+        .footnote {
+            display: flex;
+            justify-content: flex-end;
+            font-size: clamp(0.5rem, 1vw, 0.65rem);
+            color: #3a7a9a;
+            gap: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .footnote span {
+            background: rgba(0,0,0,0.02);
+            padding: 0 10px;
+            border-radius: 20px;
+        }
+        button {
+            background: #d9e8f5;
+            border: none;
+            padding: 3px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #1a5a7a;
+            cursor: pointer;
+            transition: 0.12s;
+            font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+            border: 1px solid rgba(70, 150, 200, 0.2);
+        }
+        button:hover {
+            background: #c5dcee;
+            transform: scale(0.96);
+        }
+        .flex-row {
+            display: flex;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+        /* Адаптация под очень маленькие экраны */
+        @media (max-width: 480px) {
+            .card {
+                padding: 12px 14px 10px;
+                max-height: 100vh;
+                border-radius: 16px;
+            }
+            .block {
+                padding: 8px 10px 10px;
+                border-radius: 14px;
+            }
+            .grid {
+                gap: 8px;
+            }
+            .slider-wrapper {
+                padding-top: 16px;
+            }
+            .slider-value {
+                font-size: 0.6rem;
+                padding: 0 10px;
+                min-width: 28px;
+                line-height: 1.6;
+            }
+            input[type=range] {
+                height: 5px;
+            }
+            input[type=range]::-webkit-slider-thumb {
+                width: 18px;
+                height: 18px;
+            }
+            .summary {
+                padding: 8px 12px;
+                margin: 5px 0 3px;
+                border-radius: 14px;
+            }
+            .summary .level {
+                padding: 0 12px;
+            }
+            .indicator {
+                padding: 3px 10px;
+                min-height: 24px;
+            }
+            .subhead {
+                margin-bottom: 6px;
+                padding-left: 10px;
+            }
+        }
+        @media (max-width: 380px) {
+            .card {
+                padding: 8px 10px 6px;
+            }
+            .block {
+                padding: 6px 8px 8px;
+            }
+            .grid {
+                gap: 6px;
+            }
+            .slider-group {
+                margin-bottom: 3px;
+            }
+            .slider-group label {
+                font-size: 0.6rem;
+            }
+            .summary .desc {
+                max-width: 120px;
+                font-size: 0.55rem;
+            }
+            .slider-value {
+                font-size: 0.5rem;
+                padding: 0 8px;
+                min-width: 24px;
+                line-height: 1.5;
+            }
+        }
+        @media (orientation: landscape) and (max-height: 500px) {
+            .card {
+                max-height: 100vh;
+                padding: 10px 16px 10px;
+            }
+            .block {
+                padding: 8px 10px 10px;
+            }
+            .grid {
+                gap: 8px;
+            }
+            .slider-wrapper {
+                padding-top: 14px;
+            }
+            .slider-value {
+                font-size: 0.55rem;
+                padding: 0 8px;
+                min-width: 24px;
+                top: -2px;
+            }
+            input[type=range] {
+                height: 5px;
+            }
+            input[type=range]::-webkit-slider-thumb {
+                width: 16px;
+                height: 16px;
+            }
+            .summary {
+                padding: 6px 12px;
+                margin: 5px 0 3px;
+            }
+            .indicator {
+                padding: 2px 10px;
+                min-height: 22px;
+                font-size: 0.6rem;
+            }
+            h1 {
+                font-size: 1.1rem;
+            }
+            .subhead {
+                font-size: 0.6rem;
+                margin-bottom: 5px;
+            }
+            .block h2 {
+                font-size: 0.8rem;
+            }
+            .slider-group label {
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>
+        <span>🛡️ ОПО · защита</span>
+        <span>проникновение + БПЛА</span>
+    </h1>
+    <div class="subhead">
+        Интерактивная оценка уровня защищённости объекта повышенной опасности
+    </div>
+
+    <div class="grid">
+        <!-- Блок ПРОНИКНОВЕНИЕ -->
+        <div class="block">
+            <h2>
+                🚧 Проникновение
+                <span>посторонние</span>
+            </h2>
+            <div class="slider-group">
+                <label>Периметр <small>0–10</small></label>
+                <div class="slider-wrapper">
+                    <div class="slider-value" id="perimeterValue">5.0</div>
+                    <input type="range" id="perimeter" min="0" max="10" value="5" step="0.5">
+                </div>
+                <div class="scale-label"><span>слабое</span><span>укреплённое</span></div>
+            </div>
+            <div class="slider-group">
+                <label>Контроль доступа <small>0–10</small></label>
+                <div class="slider-wrapper">
+                    <div class="slider-value" id="accessValue">4.0</div>
+                    <input type="range" id="accessControl" min="0" max="10" value="4" step="0.5">
+                </div>
+                <div class="scale-label"><span>базовый</span><span>многофакторный</span></div>
+            </div>
+            <div class="slider-group">
+                <label>Видеонаблюдение <small>0–10</small></label>
+                <div class="slider-wrapper">
+                    <div class="slider-value" id="videoValue">6.0</div>
+                    <input type="range" id="videoSurveillance" min="0" max="10" value="6" step="0.5">
+                </div>
+                <div class="scale-label"><span>ограниченное</span><span>AI-аналитика</span></div>
+            </div>
+            <div class="indicator">
+                <span class="dot" style="background: #3a8ab5;"></span> 
+                <span id="perimeterLabel">Средняя защита периметра</span>
+            </div>
+        </div>
+
+        <!-- Блок БПЛА -->
+        <div class="block">
+            <h2>
+                ✈️ БПЛА-атака
+                <span>дроны</span>
+            </h2>
+            <div class="slider-group">
+                <label>РЭБ / подавление <small>0–10</small></label>
+                <div class="slider-wrapper">
+                    <div class="slider-value" id="ewValue">4.0</div>
+                    <input type="range" id="ewRadar" min="0" max="10" value="4" step="0.5">
+                </div>
+                <div class="scale-label"><span>отсутствует</span><span>комплексное</span></div>
+            </div>
+            <div class="slider-group">
+                <label>Обнаружение / радар <small>0–10</small></label>
+                <div class="slider-wrapper">
+                    <div class="slider-value" id="detectionValue">5.0</div>
+                    <input type="range" id="detectionRadar" min="0" max="10" value="5" step="0.5">
+                </div>
+                <div class="scale-label"><span>визуальное</span><span>радар+RF</span></div>
+            </div>
+            <div class="slider-group">
+                <label>Физическое поражение <small>0–10</small></label>
+                <div class="slider-wrapper">
+                    <div class="slider-value" id="killValue">3.0</div>
+                    <input type="range" id="killMeans" min="0" max="10" value="3" step="0.5">
+                </div>
+                <div class="scale-label"><span>нет средств</span><span>активная защита</span></div>
+            </div>
+            <div class="indicator">
+                <span class="dot" style="background: #b17f3b;"></span> 
+                <span id="droneLabel">Средняя защита от БПЛА</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Итоговая оценка -->
+    <div class="summary" id="summaryBlock">
+        <div style="display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap;">
+            <span class="level" id="totalScore">5.6</span>
+            <span style="font-size: clamp(0.7rem, 1.5vw, 0.9rem); opacity: 0.7;">/ 10</span>
+            <span class="desc" id="statusDesc">Средний уровень</span>
+        </div>
+        <div class="badge" id="riskBadge">⚠️ риск</div>
+    </div>
+
+    <div class="flex-row">
+        <button id="resetBtn">↺ Сбросить к средним</button>
+    </div>
+    <div class="footnote">
+        <span>🛡️ ОПО — объект повышенной опасности</span>
+        <span>📊 оценка 0–10</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Элементы управления
+        const perimeterSlider = document.getElementById('perimeter');
+        const accessSlider = document.getElementById('accessControl');
+        const videoSlider = document.getElementById('videoSurveillance');
+        const ewSlider = document.getElementById('ewRadar');
+        const detectionSlider = document.getElementById('detectionRadar');
+        const killSlider = document.getElementById('killMeans');
+
+        // Элементы отображения значений над слайдерами
+        const perimeterValue = document.getElementById('perimeterValue');
+        const accessValue = document.getElementById('accessValue');
+        const videoValue = document.getElementById('videoValue');
+        const ewValue = document.getElementById('ewValue');
+        const detectionValue = document.getElementById('detectionValue');
+        const killValue = document.getElementById('killValue');
+
+        // Элементы отображения описаний
+        const perimeterLabel = document.getElementById('perimeterLabel');
+        const droneLabel = document.getElementById('droneLabel');
+        const totalScoreEl = document.getElementById('totalScore');
+        const statusDesc = document.getElementById('statusDesc');
+        const riskBadge = document.getElementById('riskBadge');
+
+        // Функция обновления положения плавающего значения
+        function updateSliderValue(slider, valueElement) {
+            const val = parseFloat(slider.value);
+            valueElement.textContent = val.toFixed(1);
+            const percent = (val - parseFloat(slider.min)) / (parseFloat(slider.max) - parseFloat(slider.min)) * 100;
+            valueElement.style.left = `calc(${percent}% + (${-6 - (val * 1.5)}px))`;
+            if (val >= 9.5) {
+                valueElement.style.left = `calc(${percent}% - 10px)`;
+            } else if (val <= 0.5) {
+                valueElement.style.left = `calc(${percent}% + 8px)`;
+            }
+        }
+
+        // Функция обновления всех значений
+        function updateAll() {
+            const p = parseFloat(perimeterSlider.value);
+            const a = parseFloat(accessSlider.value);
+            const v = parseFloat(videoSlider.value);
+            const ew = parseFloat(ewSlider.value);
+            const d = parseFloat(detectionSlider.value);
+            const k = parseFloat(killSlider.value);
+
+            updateSliderValue(perimeterSlider, perimeterValue);
+            updateSliderValue(accessSlider, accessValue);
+            updateSliderValue(videoSlider, videoValue);
+            updateSliderValue(ewSlider, ewValue);
+            updateSliderValue(detectionSlider, detectionValue);
+            updateSliderValue(killSlider, killValue);
+
+            const penetrationScore = (p + a + v) / 3;
+            const droneScore = (ew + d + k) / 3;
+            const overall = (penetrationScore + droneScore) / 2;
+            const totalRounded = Math.round(overall * 10) / 10;
+
+            perimeterLabel.textContent = getPenetrationDesc(p, a, v);
+            droneLabel.textContent = getDroneDesc(ew, d, k);
+
+            totalScoreEl.textContent = totalRounded.toFixed(1);
+
+            let badgeText = '';
+            let descText = '';
+            let badgeColor = '#f5b042';
+
+            if (totalRounded >= 8.5) {
+                badgeText = '✅ низкий риск';
+                descText = 'ОПО хорошо защищён';
+                badgeColor = '#3ba87b';
+            } else if (totalRounded >= 6.5) {
+                badgeText = '⚠️ средний риск';
+                descText = 'Хороший уровень, есть уязвимости';
+                badgeColor = '#f5b042';
+            } else if (totalRounded >= 4.0) {
+                badgeText = '⚠️ риск';
+                descText = 'Существенные недостатки';
+                badgeColor = '#e8843a';
+            } else {
+                badgeText = '🔴 высокий риск';
+                descText = 'Критическая уязвимость';
+                badgeColor = '#c74a4a';
+            }
+            statusDesc.textContent = descText;
+            riskBadge.textContent = badgeText;
+            riskBadge.style.background = badgeColor;
+            riskBadge.style.color = (totalRounded >= 8.5) ? '#0a2a2a' : '#1f2e3b';
+        }
+
+        function getPenetrationDesc(p, a, v) {
+            const avg = (p + a + v) / 3;
+            if (avg >= 8) return '🔒 Высокая защита периметра';
+            if (avg >= 5.5) return '🛡️ Умеренная защита';
+            if (avg >= 3) return '⚠️ Ослабленный контроль';
+            return '❗ Критическая уязвимость';
+        }
+
+        function getDroneDesc(ew, d, k) {
+            const avg = (ew + d + k) / 3;
+            if (avg >= 8) return '📡 Комплексная защита от БПЛА';
+            if (avg >= 5.5) return '📡 Частичная защита';
+            if (avg >= 3) return '⚠️ Слабая оборона';
+            return '❗ БПЛА-уязвимость';
+        }
+
+        const sliders = [perimeterSlider, accessSlider, videoSlider, ewSlider, detectionSlider, killSlider];
+        sliders.forEach(slider => {
+            slider.addEventListener('input', updateAll);
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            perimeterSlider.value = '5';
+            accessSlider.value = '4';
+            videoSlider.value = '6';
+            ewSlider.value = '4';
+            detectionSlider.value = '5';
+            killSlider.value = '3';
+            updateAll();
+        });
+
+        updateAll();
+    })();
+</script>
+</body>
+</html>
