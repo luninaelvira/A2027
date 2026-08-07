@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>СЭЗ для ООО «Ромашка»</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #f5f0eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      padding: 20px;
+    }
+    .card {
+      max-width: 700px;
+      width: 100%;
+      background: #fffaf7;
+      border-radius: 40px;
+      padding: 30px 30px 35px;
+      box-shadow: 0 12px 30px rgba(180, 160, 150, 0.20);
+      border: 1px solid #f0e3db;
+      transition: all 0.1s ease;
+    }
+    h2 {
+      font-weight: 500;
+      font-size: 1.7rem;
+      color: #6b5a4e;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    h2 small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #9a897e;
+      background: #f3eae4;
+      padding: 4px 16px;
+      border-radius: 40px;
+      letter-spacing: 0.2px;
+    }
+    .subhead {
+      color: #8f7b6e;
+      font-size: 1rem;
+      border-left: 4px solid #decbc1;
+      padding-left: 18px;
+      margin-top: -6px;
+      margin-bottom: 28px;
+      background: #faf3ef;
+      border-radius: 0 20px 20px 0;
+      padding: 12px 18px;
+      line-height: 1.5;
+    }
+    .subhead strong {
+      color: #5f4c3e;
+      font-weight: 600;
+    }
+    .document-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 24px 0 28px;
+    }
+    .doc-item {
+      background: #fdf9f6;
+      border-radius: 60px;
+      padding: 12px 20px 12px 26px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid #eadfd7;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(190, 170, 160, 0.06);
+    }
+    .doc-item:hover {
+      background: #f8f0ea;
+      border-color: #dacbc1;
+    }
+    .doc-item input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      accent-color: #b8a094;
+      transform: scale(1.1);
+      flex-shrink: 0;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .doc-item label {
+      font-size: 1.05rem;
+      color: #4d3e34;
+      cursor: pointer;
+      flex: 1;
+      padding: 4px 0;
+      font-weight: 450;
+      letter-spacing: 0.2px;
+      transition: color 0.15s;
+    }
+    /* ---------- Стили для подсветки (добавляются классом) ---------- */
+    .doc-item.correct-selected {
+      background: #c8e6d9;
+      border-color: #5b9b7a;
+      box-shadow: 0 2px 10px rgba(80, 160, 120, 0.15);
+    }
+    .doc-item.correct-selected label {
+      color: #1f4d35;
+      font-weight: 500;
+    }
+    .doc-item.correct-unselected {
+      background: #e6f2ec;
+      border-color: #9ec0ae;
+      box-shadow: 0 2px 6px rgba(120, 170, 140, 0.08);
+    }
+    .doc-item.correct-unselected label {
+      color: #2b5c44;
+      font-weight: 500;
+    }
+    .doc-item.wrong-selected {
+      background: #fadfdb;
+      border-color: #ce8f86;
+      box-shadow: 0 2px 10px rgba(190, 100, 90, 0.12);
+    }
+    .doc-item.wrong-selected label {
+      color: #7a3d35;
+      font-weight: 500;
+    }
+    .doc-item.wrong-unselected {
+      background: #f9edeb;
+      border-color: #dbb9b2;
+      box-shadow: 0 2px 6px rgba(180, 110, 100, 0.06);
+    }
+    .doc-item.wrong-unselected label {
+      color: #6f4a42;
+    }
+    /* сброс ховера при подсветке, чтобы не конфликтовать */
+    .doc-item.correct-selected:hover,
+    .doc-item.correct-unselected:hover,
+    .doc-item.wrong-selected:hover,
+    .doc-item.wrong-unselected:hover {
+      background: var(--hover-bg, #f8f0ea);
+    }
+    /* ---------- Кнопки ---------- */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 18px;
+      margin: 8px 0 20px;
+    }
+    .btn {
+      background: #ede3db;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #4f3f34;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #dbcec4;
+      box-shadow: 0 2px 4px rgba(150, 130, 120, 0.05);
+      flex: 1 0 auto;
+      justify-content: center;
+    }
+    .btn-primary {
+      background: #cfbfb3;
+      border-color: #b8a599;
+      color: #3f3229;
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgba(160, 140, 130, 0.12);
+    }
+    .btn-primary:hover {
+      background: #c2b0a2;
+      transform: scale(1.01);
+      border-color: #a69486;
+    }
+    .btn-secondary {
+      background: #f1e7e0;
+      border-color: #dacfc6;
+    }
+    .btn-secondary:hover {
+      background: #e6dad1;
+    }
+    /* ---------- Блок обратной связи ---------- */
+    .feedback {
+      background: #f5ede7;
+      border-radius: 28px;
+      padding: 22px 26px;
+      margin-top: 22px;
+      border-left: 6px solid #dac2b6;
+      color: #3f342c;
+      font-size: 1rem;
+      line-height: 1.6;
+      box-shadow: inset 0 1px 6px rgba(180, 160, 150, 0.08);
+      transition: all 0.2s;
+      min-height: 80px;
+    }
+    .feedback.success {
+      border-left-color: #569a73;
+      background: #e2f0e9;
+    }
+    .feedback.warning {
+      border-left-color: #dbbd9c;
+      background: #f8efe7;
+    }
+    .feedback.info {
+      border-left-color: #b8aaa0;
+      background: #f3ece7;
+    }
+    .feedback p {
+      margin: 0;
+    }
+    .feedback strong {
+      color: #3d2f26;
+    }
+    .footnote {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: #a18f83;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .footnote span {
+      background: #f1e8e2;
+      padding: 4px 14px;
+      border-radius: 40px;
+    }
+    @media (max-width: 480px) {
+      .card { padding: 22px 18px; }
+      .doc-item { padding: 12px 14px 12px 18px; }
+      .doc-item label { font-size: 0.98rem; }
+      .btn { padding: 12px 18px; }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>
+    🌼 ООО «Ромашка»
+    <small>заявление на СЭЗ</small>
+  </h2>
+  <div class="subhead">
+    📋 <strong>П. 14 Приложения 1 к Приказу № 506</strong> · выберите документы, которые <strong>обязательно</strong> должны быть в пакете
+  </div>
+
+  <div class="document-list" id="docList">
+    <div class="doc-item" data-key="expertise">
+      <input type="checkbox" id="chkExpertise">
+      <label for="chkExpertise">Результаты санитарно‑эпидемиологической экспертизы аккредитованной лаборатории</label>
+    </div>
+    <div class="doc-item" data-key="project">
+      <input type="checkbox" id="chkProject">
+      <label for="chkProject">Проектные материалы по ОРО</label>
+    </div>
+    <div class="doc-item" data-key="power">
+      <input type="checkbox" id="chkPower">
+      <label for="chkPower">Доверенность на сотрудника</label>
+    </div>
+    <div class="doc-item" data-key="ecotest">
+      <input type="checkbox" id="chkEcotest">
+      <label for="chkEcotest">Результаты исследований от лаборатории «ЭкоТест»</label>
+    </div>
+    <div class="doc-item" data-key="license">
+      <input type="checkbox" id="chkLicense">
+      <label for="chkLicense">Копия лицензии на обращение с отходами</label>
+    </div>
+    <div class="doc-item" data-key="order">
+      <input type="checkbox" id="chkOrder">
+      <label for="chkOrder">Внутренний приказ предприятия о назначении ответственного</label>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="checkBtn">✅ Проверить пакет</button>
+    <button class="btn btn-secondary" id="resetBtn">↺ Сбросить выбор</button>
+  </div>
+
+  <div class="feedback" id="feedback">
+    <p>📎 Отметьте документы и нажмите «Проверить».</p>
+  </div>
+  <div class="footnote">
+    <span>⚖️ п. 14 Приложения 1</span>
+    <span>📌 обязательные: экспертиза, проектные материалы, доверенность</span>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const checkBtn = document.getElementById('checkBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const feedback = document.getElementById('feedback');
+    const docItems = document.querySelectorAll('.doc-item');
+    const REQUIRED_KEYS = ['expertise', 'project', 'power']; // обязательные
+
+    // Получить массив выбранных ключей
+    function getSelectedKeys() {
+      const selected = [];
+      docItems.forEach(item => {
+        const cb = item.querySelector('input[type="checkbox"]');
+        if (cb && cb.checked) {
+          const key = item.dataset.key;
+          if (key) selected.push(key);
+        }
+      });
+      return selected;
+    }
+
+    // Сброс всех классов подсветки
+    function clearHighlight() {
+      docItems.forEach(item => {
+        item.classList.remove('correct-selected', 'correct-unselected', 'wrong-selected', 'wrong-unselected');
+      });
+    }
+
+    // Основная проверка + подсветка + сообщение
+    function validateAndHighlight() {
+      const selected = getSelectedKeys();
+      const hasAllRequired = REQUIRED_KEYS.every(key => selected.includes(key));
+      const extraKeys = selected.filter(key => !REQUIRED_KEYS.includes(key));
+      const hasExtra = extraKeys.length > 0;
+      const isExactlyCorrect = (selected.length === 3 && hasAllRequired && !hasExtra);
+
+      // --- 1. Подсветка каждого пункта ---
+      docItems.forEach(item => {
+        const key = item.dataset.key;
+        const isRequired = REQUIRED_KEYS.includes(key);
+        const isChecked = selected.includes(key);
+
+        // Сброс старых классов
+        item.classList.remove('correct-selected', 'correct-unselected', 'wrong-selected', 'wrong-unselected');
+
+        if (isRequired && isChecked) {
+          item.classList.add('correct-selected');
+        } else if (isRequired && !isChecked) {
+          item.classList.add('correct-unselected');
+        } else if (!isRequired && isChecked) {
+          item.classList.add('wrong-selected');
+        } else { // !isRequired && !isChecked
+          item.classList.add('wrong-unselected');
+        }
+      });
+
+      // --- 2. Формирование сообщения ---
+      let message = '';
+      let cssClass = '';
+
+      if (isExactlyCorrect) {
+        message = `✅ Отлично! Вы верно выделили обязательный пакет по п. 14. Лицензия и приказ не входят в перечень обязательных для заявления.`;
+        cssClass = 'success';
+      } else if (hasExtra) {
+        message = `⚠️ Обратите внимание: лицензия и внутренний приказ не требуются по п. 14 Приложения 1. Главное — аккредитованная экспертиза, проектные материалы и доверенность на представителя.`;
+        cssClass = 'warning';
+      } else if (!hasAllRequired) {
+        message = `🔍 Проверьте п. 14: без результатов аккредитованной экспертизы и проектных материалов пакет неполный. Доверенность тоже обязательна, если заявление подаёт представитель.`;
+        cssClass = 'info';
+      } else {
+        // fallback (маловероятно)
+        message = `📋 Проверьте состав документов согласно п. 14. Обязательны: экспертиза аккредитованной лаборатории, проектные материалы, доверенность.`;
+        cssClass = 'info';
+      }
+
+      feedback.className = 'feedback ' + cssClass;
+      feedback.innerHTML = `<p>${message}</p>`;
+    }
+
+    // --- События ---
+    checkBtn.addEventListener('click', validateAndHighlight);
+
+    resetBtn.addEventListener('click', function() {
+      // Снимаем все чекбоксы
+      docItems.forEach(item => {
+        const cb = item.querySelector('input[type="checkbox"]');
+        if (cb) cb.checked = false;
+      });
+      clearHighlight();
+      feedback.className = 'feedback';
+      feedback.innerHTML = `<p>🗂️ Выбор сброшен. Отметьте нужные документы.</p>`;
+    });
+
+    // При изменении любого чекбокса — убираем подсветку и нейтрализуем сообщение
+    docItems.forEach(item => {
+      const cb = item.querySelector('input[type="checkbox"]');
+      if (cb) {
+        cb.addEventListener('change', function() {
+          // Убираем классы подсветки, чтобы не было путаницы
+          clearHighlight();
+          // Меняем сообщение на нейтральное (если там был результат)
+          const currentText = feedback.innerText;
+          if (currentText.includes('Отлично') || currentText.includes('Обратите внимание') || currentText.includes('Проверьте')) {
+            feedback.className = 'feedback';
+            feedback.innerHTML = `<p>📎 Состав пакета изменён. Нажмите «Проверить» для новой оценки.</p>`;
+          }
+        });
+      }
+    });
+
+    // Инициализация: убираем лишние классы (на всякий случай)
+    clearHighlight();
+  })();
+</script>
+</body>
+</html>
