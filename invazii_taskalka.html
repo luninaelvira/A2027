@@ -13,6 +13,7 @@
             --bg: #f4f1de;
             --text: #3d405b;
             --error-red: #e07a5f;
+            --shadow-color: rgba(0,0,0,0.08);
         }
 
         body {
@@ -24,18 +25,22 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            user-select: none; /* Чтобы текст не выделялся при перетаскивании */
+            user-select: none;
         }
 
-        h1 { margin-bottom: 5px; text-align: center;}
+        h1 { margin-bottom: 5px; text-align: center; color: #2d3e50;}
         .subtitle { margin-bottom: 30px; color: #666; text-align: center; }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 1200px;
+        }
 
         .game-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 30px;
-            max-width: 1100px;
             width: 100%;
         }
 
@@ -43,131 +48,128 @@
         .plant-card {
             background: white;
             border-radius: 20px;
-            padding: 20px 20px 30px;
+            padding: 20px 20px 25px;
             width: 220px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px var(--shadow-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             border: 2px solid transparent;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, transform 0.2s;
             position: relative;
         }
 
-        /* Зона, куда нужно перетащить (Target) - Ваш рисунок */
+        /* Зона, куда нужно перетащить */
         .drop-zone {
             width: 100%;
             height: 180px; 
-            background-color: #f0f0f0;
+            background-color: #e8eaed;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #777;
             background-size: cover;
             background-position: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-repeat: no-repeat;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
             position: relative;
-            margin-bottom: 10px;
-            border: 1px dashed #ccc;
+            margin-bottom: 15px;
+            border: 2px dashed #b0b8c1;
         }
 
         /* Анимация исчезновения при победе */
         .drop-zone.victory {
             opacity: 0;
-            transform: scale(0.2) rotate(15deg);
+            transform: scale(0.3) rotate(10deg);
             pointer-events: none;
             border: none;
         }
 
         /* Пульсация при ошибке (на всей карточке) */
         .plant-card.error-pulse {
-            animation: pulseError 0.5s ease 3;
+            animation: pulseError 0.5s ease 2;
             border-color: var(--error-red);
         }
 
         @keyframes pulseError {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); background-color: var(--peach); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); background-color: white; }
+            50% { transform: scale(1.02); background-color: var(--peach); }
+            100% { transform: scale(1); background-color: white; }
         }
 
-        .plant-name { font-weight: bold; font-size: 16px; text-align: center; }
+        .plant-name { font-weight: bold; font-size: 16px; text-align: center; color: #333; }
 
-        /* Панель инструментов (доступные методы) */
+        /* Панель инструментов */
         .tools-panel {
             background: var(--cream);
-            padding: 20px;
+            padding: 20px 25px;
             border-radius: 30px;
-            max-width: 900px;
             width: 100%;
-            margin-top: 30px;
+            margin-top: 40px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            min-height: 60px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            min-height: 80px;
+            box-sizing: border-box;
         }
 
         /* Перетаскиваемый элемент */
         .tool-item {
             background: white;
-            padding: 12px 18px;
+            padding: 12px 22px;
             border-radius: 30px;
             cursor: grab;
             border: 2px solid var(--lavender);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             font-size: 14px;
-            font-weight: 500;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+            color: #3d405b;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
             display: inline-block;
         }
 
         .tool-item:active {
             cursor: grabbing;
-            transform: scale(1.05);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            transform: scale(0.95);
             border-color: #888;
         }
 
         .tool-item:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             border-color: var(--mint);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
-        /* Инструмент исчез (неверный выбор) */
-        .tool-item.disabled {
-            opacity: 0;
-            transform: scale(0.5);
+        /* Правильный инструмент блокируется после победы */
+        .tool-item.solved {
+            opacity: 0.5;
             pointer-events: none;
-            transition: all 0.3s;
-            position: absolute; /* Чтобы не ломался поток */
-            margin: 0; 
+            cursor: default;
+            border-color: #ccc;
+            background: #f0f0f0;
         }
 
-        /* Призрак (который летит за курсором) */
+        /* Призрак (летит за курсором) */
         .drag-ghost {
             position: fixed;
             pointer-events: none;
             background: white;
-            padding: 12px 18px;
+            padding: 12px 22px;
             border-radius: 30px;
-            border: 2px solid #555;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 2px solid #4a5568;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             z-index: 1000;
             transform: translate(-50%, -50%);
-            opacity: 0.9;
+            opacity: 0.95;
+            color: #3d405b;
         }
 
         /* Уведомления */
         .notification-area {
             margin-top: 25px;
-            padding: 20px;
-            border-radius: 15px;
+            padding: 18px 25px;
+            border-radius: 20px;
             max-width: 800px;
             width: 100%;
             text-align: center;
@@ -175,35 +177,37 @@
             display: none;
             font-weight: 500;
             line-height: 1.5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        .notification-area.success { background: var(--mint); color: #2d6a4f; }
-        .notification-area.error { background: var(--peach); color: #9b2226; }
+        .notification-area.success { background: var(--mint); color: #1b4332; border: 1px solid #95d5b2; }
+        .notification-area.error { background: var(--peach); color: #7f2d1a; border: 1px solid #f4a261; }
 
     </style>
 </head>
 <body>
 
-    <h1>🌿 Выбери правильный метод</h1>
-    <div class="subtitle">Зажми инструмент мышкой и перетащи его прямо на картинку с растением.</div>
+    <div class="game-wrapper">
+        <h1>🌿 Перетащи правильный метод борьбы</h1>
+        <div class="subtitle">Зажми инструмент мышкой и перетащи его прямо на картинку с растением. <br>Ошибаться можно сколько угодно — инструменты не пропадают!</div>
 
-    <div class="game-container" id="gameContainer"></div>
-    <div class="notification-area" id="notificationArea"></div>
-    <div class="tools-panel" id="toolsPanel"></div>
+        <div class="game-container" id="gameContainer"></div>
+        <div class="notification-area" id="notificationArea"></div>
+        <div class="tools-panel" id="toolsPanel"></div>
+    </div>
 
     <script>
-        // === БАЗА ДАННЫХ (ФАЙЛЫ В ОДНОЙ ПАПКЕ) ===
-        // Пути теперь без папок, просто имя файла
+        // === БАЗА ДАННЫХ ===
         const plantData = [
             {
                 id: 'borschevik',
                 name: 'Борщевик Сосновского',
-                imagePath: 'Борщевик Сосновского.png', // или .png
+                imagePath: 'Борщевик Сосновского.png',
                 correctTool: 'Гербицид (глифосат)',
-                successText: '✅ Отлично! Гербицид проникает через листья и стебель, распределяется по всему растению и уничтожает корневую систему — это единственный надежный способ.',
+                successText: '✅ Отлично! Гербицид проникает через листья и стебель, распределяется по всему растению и уничтожает корневую систему. Это единственный способ убить корень.',
                 wrongComments: {
-                    'Серп': '❌ Простое скашивание лишь ослабляет растение, но не убивает корень. Оно отрастет снова.',
-                    'Соль с уксусом': '❌ Народные средства убивают только надземную часть, а мощный корень выживает.',
+                    'Серп': '❌ Простое скашивание лишь ослабляет растение, но не убивает корень. Он отрастет снова!',
+                    'Соль с уксусом': '❌ Народные средства убивают только надземную часть, а мощный корень выживает в земле.',
                     'Чёрная плёнка': '❌ Укрытие работает, но требует целого сезона, а острые остатки стеблей могут прорвать материал.'
                 }
             },
@@ -212,11 +216,11 @@
                 name: 'Элодея канадская',
                 imagePath: 'Элодея канадская.png',
                 correctTool: 'Грабли (ручное удаление)',
-                successText: '✅ Верно! Полное ручное удаление граблями или спецмашинами — ключевой метод. Нужно убрать растение целиком, включая придонную часть и корни.',
+                successText: '✅ Верно! Полное ручное удаление граблями или спецмашинами — ключевой метод. Нужно убрать растение целиком, включая придонную часть.',
                 wrongComments: {
-                    'Серп': '❌ Механическая срезка под водой стимулирует рост: из каждого оторванного фрагмента вырастет новое растение.',
+                    'Серп': '❌ Механическая срезка под водой стимулирует рост: из каждого оторванного фрагмента вырастет новое растение!',
                     'Насос (понижение уровня воды)': '❌ Понижение уровня часто неэффективно: при повторном затоплении элодея быстро восстанавливается.',
-                    'Гербицид (глифосат)': '❌ Химия токсична для водной экосистемы, сейчас её применяют ограниченно.'
+                    'Гербицид (глифосат)': '❌ Химия токсична для водной экосистемы, сейчас её применяют ограниченно из-за вреда для рыб.'
                 }
             },
             {
@@ -224,11 +228,11 @@
                 name: 'Клён ясенелистный',
                 imagePath: 'Клён ясенелистный.png',
                 correctTool: 'Пила + Гербицид (на срез)',
-                successText: '✅ Правильно! Обработка свежего спила системным гербицидом. Препарат попадает в проводящие ткани и уничтожает корень, предотвращая появление поросли.',
+                successText: '✅ Правильно! Обработка свежего спила системным гербицидом уничтожает корень и предотвращает появление обильной поросли.',
                 wrongComments: {
-                    'Пила': '❌ Простое спиливание почти всегда приводит к тому, что из пня пойдет новая обильная поросль.',
-                    'Экскаватор': '❌ Механическое выкапывание трудоемко, а из-за мощной корневой системы полностью извлечь все корни сложно.',
-                    'Соль с гвоздями': '❌ Народные методы работают слабо и могут навредить окружающей почве.'
+                    'Пила': '❌ Простое спиливание почти всегда приводит к тому, что из пня пойдет новая поросль.',
+                    'Экскаватор': '❌ Механическое выкапывание трудоемко, а из-за мощной корневой системы полностью извлечь все корни почти невозможно.',
+                    'Соль с гвоздями': '❌ Народные методы работают слабо и могут засолить почву.'
                 }
             },
             {
@@ -236,11 +240,11 @@
                 name: 'Люпин многолистный',
                 imagePath: 'Люпин многолистный.png',
                 correctTool: 'Триммер бензиновый (кошение)',
-                successText: '✅ Молодец! Специальное кошение с металлическим ножом (движение сверху вниз) расщепляет корневища и изолирует почки, приводя к гибели растения.',
+                successText: '✅ Молодец! Кошение с металлическим ножом расщепляет корневища, изолирует почки возобновления и приводит к гибели растения.',
                 wrongComments: {
-                    'Серп': '❌ Обычное скашивание лишь срезает надземную часть. Корневища остаются целыми, и растение быстро восстанавливается.',
+                    'Серп': '❌ Обычное скашивание лишь срезает надземную часть. Корневища остаются целыми, и люпин быстро восстанавливается.',
                     'Лопата (перекопка)': '❌ Перекопка часто лишь размельчает корни, из которых потом вырастают новые побеги.',
-                    'Гербицид (глифосат)': '❌ Гербициды возможны, но их применяют как крайнюю меру, особенно если люпин уже зацвел или разросся на большой площади.'
+                    'Гербицид (глифосат)': '❌ Гербициды возможны, но их применяют как крайнюю меру. Триммер намного экологичнее!'
                 }
             }
         ];
@@ -262,16 +266,14 @@
 
         // === ИНИЦИАЛИЗАЦИЯ ===
         function initGame() {
-            // 1. Генерация карточек растений
+            // 1. Генерация карточек
             plantData.forEach(plant => {
                 const card = document.createElement('div');
                 card.className = 'plant-card';
                 card.id = `card-${plant.id}`;
                 
                 card.innerHTML = `
-                    <div class="drop-zone" id="zone-${plant.id}" style="background-image: url('${plant.imagePath}');">
-                        <span style="background:rgba(255,255,255,0.8); padding: 5px 10px; border-radius:5px; font-weight:bold; color:#333;">Перетащи сюда</span>
-                    </div>
+                    <div class="drop-zone" id="zone-${plant.id}" style="background-image: url('${plant.imagePath}');"></div>
                     <div class="plant-name">${plant.name}</div>
                 `;
                 gameContainer.appendChild(card);
@@ -293,7 +295,8 @@
 
         // === ЛОГИКА DRAG & DROP ===
         function onToolMouseDown(e) {
-            if (e.target.classList.contains('disabled')) return;
+            // Если инструмент заблокирован (уже использован верно), не даем тащить
+            if (e.target.classList.contains('solved')) return;
             
             activeToolElement = e.target;
             activeToolName = activeToolElement.dataset.toolName;
@@ -324,6 +327,7 @@
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
 
+            // Проверяем, отпустили ли мышь над зоной сброса
             const dropZones = document.querySelectorAll('.drop-zone');
             let targetZone = null;
             let targetPlantId = null;
@@ -337,9 +341,11 @@
                 }
             });
 
-            if (targetZone && targetPlantId) {
+            // Если сбросили на карточку растения
+            if (targetZone && targetPlantId && activeToolElement) {
                 handleDrop(targetPlantId, activeToolName, activeToolElement);
             }
+            
             activeToolElement = null;
             activeToolName = null;
         }
@@ -350,27 +356,34 @@
             const cardElement = document.getElementById(`card-${plantId}`);
             const zoneElement = document.getElementById(`zone-${plantId}`);
 
+            // Если растение уже уничтожено, игнорируем
             if (cardElement.classList.contains('solved')) return;
 
             if (toolName === plant.correctTool) {
                 // === ПОБЕДА ===
                 cardElement.classList.add('solved');
-                zoneElement.classList.add('victory'); 
+                zoneElement.classList.add('victory'); // Картинка красиво исчезает
+                
+                // Блокируем именно этот инструмент (чтобы нельзя было применить повторно)
+                toolElement.classList.add('solved');
+                
                 showNotification(plant.successText, "success");
-                toolElement.classList.add('disabled');
             } else {
                 // === ОШИБКА ===
+                // Пульсирует вся карточка
                 cardElement.classList.remove('error-pulse');
-                void cardElement.offsetWidth; 
+                void cardElement.offsetWidth; // Перезапуск анимации
                 cardElement.classList.add('error-pulse');
 
-                toolElement.classList.add('disabled');
+                // Инструмент НЕ ИСЧЕЗАЕТ, а просто возвращается на место (мы ничего с ним не делаем)
 
+                // Достаем комментарий
                 const comment = plant.wrongComments[toolName] || "Этот метод абсолютно не эффективен против данного вида.";
                 showNotification(comment, "error");
             }
         }
 
+        // === УВЕДОМЛЕНИЯ ===
         function showNotification(text, type) {
             notificationArea.style.display = 'block';
             notificationArea.className = `notification-area ${type}`;
@@ -379,7 +392,7 @@
             clearTimeout(window.notificationTimeout);
             window.notificationTimeout = setTimeout(() => {
                 notificationArea.style.display = 'none';
-            }, 8000);
+            }, 7000);
         }
 
         initGame();
