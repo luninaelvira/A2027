@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест-да-нетка · Горный поток</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f7f3ee;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            width: 700px;
+            max-width: 100%;
+            background: #ffffffea;
+            backdrop-filter: blur(2px);
+            background: #fffcf9;
+            border-radius: 40px;
+            box-shadow: 0 16px 40px -12px rgba(140, 110, 90, 0.25);
+            padding: 32px 30px 38px;
+            transition: all 0.2s ease;
+            border: 1px solid #f0e4db;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #4d3e34;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .subhead {
+            font-size: 15px;
+            color: #7f6b5d;
+            border-left: 4px solid #dacbc1;
+            padding-left: 14px;
+            margin-bottom: 28px;
+            line-height: 1.4;
+            font-weight: 350;
+        }
+
+        .step-indicator {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .step-dot {
+            background: #ede3db;
+            color: #6b5a4c;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .step-dot.active {
+            background: #dccfc5;
+            border-color: #b9a697;
+            color: #3f3229;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(150, 120, 100, 0.15);
+        }
+
+        .step-dot.done {
+            background: #cdd9cb;
+            border-color: #acc0a7;
+            color: #2f452a;
+        }
+
+        .question-box {
+            background: #faf5f0;
+            border-radius: 28px;
+            padding: 24px 26px 28px;
+            margin-bottom: 20px;
+            border: 1px solid #ede1d7;
+            transition: 0.25s;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #3f3228;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .question-hint {
+            font-size: 14px;
+            color: #846f60;
+            background: #f3eae2;
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 40px;
+            margin-bottom: 16px;
+            letter-spacing: 0.2px;
+        }
+
+        .options {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .btn-option {
+            background: white;
+            border: 1px solid #dccfc4;
+            padding: 10px 36px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #3f3229;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            flex: 1 0 auto;
+            min-width: 100px;
+        }
+
+        .btn-option:hover:not(:disabled) {
+            background: #f1e7df;
+            border-color: #b7a392;
+            transform: scale(1.01);
+            box-shadow: 0 6px 12px rgba(130, 100, 80, 0.08);
+        }
+
+        .btn-option:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.2);
+        }
+
+        .btn-option.correct {
+            background: #d3e2cf;
+            border-color: #8cb083;
+            color: #2a4824;
+        }
+
+        .btn-option.wrong {
+            background: #f7ded9;
+            border-color: #dbb5ab;
+            color: #733f34;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 14px 20px;
+            border-radius: 40px;
+            font-size: 15px;
+            background: #f4ede8;
+            border-left: 5px solid #c9b7a9;
+            color: #3f342c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            min-height: 60px;
+        }
+
+        .feedback .emoji-big {
+            font-size: 28px;
+        }
+
+        .feedback.success {
+            background: #e6f0e3;
+            border-left-color: #759b6b;
+        }
+
+        .feedback.error {
+            background: #f7e7e2;
+            border-left-color: #c98676;
+        }
+
+        .next-step-wrap {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .btn-next {
+            background: #cfbfb2;
+            border: none;
+            padding: 12px 36px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #2f241d;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(100, 70, 50, 0.1);
+            border: 1px solid #dacbc0;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .btn-next.enabled {
+            opacity: 1;
+            pointer-events: auto;
+            background: #dccbc0;
+            border-color: #bcab9d;
+        }
+
+        .btn-next.enabled:hover {
+            background: #cebdb0;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(130, 100, 80, 0.15);
+        }
+
+        .final-message {
+            margin-top: 10px;
+            background: #f2ece6;
+            border-radius: 60px;
+            padding: 18px 24px;
+            border: 1px solid #e1d2c6;
+            color: #3f3228;
+            font-weight: 450;
+            line-height: 1.5;
+        }
+
+        .final-message strong {
+            color: #3b2b1f;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        hr {
+            margin: 20px 0 12px;
+            border: 0;
+            border-top: 2px dashed #e2d4ca;
+        }
+
+        .small-note {
+            font-size: 14px;
+            color: #8d7a6b;
+            margin-top: 6px;
+            padding-left: 8px;
+        }
+
+        .flex-space {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 550px) {
+            .card { padding: 24px 16px; }
+            .question-text { font-size: 18px; }
+            .btn-option { padding: 10px 20px; min-width: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="app">
+    <div class="flex-space">
+        <h1>⛰️ Горный поток</h1>
+        <span style="font-size: 14px; background: #eee5dd; padding: 4px 14px; border-radius: 40px; color:#5f4c3d;">да-нетка</span>
+    </div>
+    <div class="subhead">
+        Проверка инспектора: «Вы нарушили пункт 3 нового Порядка». Что именно не сделала компания?
+    </div>
+
+    <!-- Индикатор шагов -->
+    <div class="step-indicator" id="stepIndicator">
+        <span class="step-dot active" data-step="0">1</span>
+        <span class="step-dot" data-step="1">2</span>
+        <span class="step-dot" data-step="2">3</span>
+        <span class="step-dot" data-step="3">4</span>
+        <span class="step-dot" data-step="4">5</span>
+    </div>
+
+    <!-- Контейнер для вопросов (все шаги рендерятся здесь) -->
+    <div id="questionContainer"></div>
+
+    <!-- Блок финального ответа (появится после всех шагов) -->
+    <div id="finalBlock" class="hidden">
+        <hr>
+        <div class="final-message">
+            ✅ <strong>Итоговый ответ:</strong> Это учётная карточка буровой скважины, которую надо подать через ЛК недропользователя. Компания должна была сделать это в течение <strong>15 рабочих дней</strong>, но забыла.
+        </div>
+        <div style="margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap;">
+            <span style="background: #e0d5cb; padding: 4px 18px; border-radius: 40px; font-size: 14px;">📋 лицензия — нет</span>
+            <span style="background: #e0d5cb; padding: 4px 18px; border-radius: 40px; font-size: 14px;">📄 бумажный? нет, электронная</span>
+            <span style="background: #e0d5cb; padding: 4px 18px; border-radius: 40px; font-size: 14px;">⏳ 15 рабочих дней — да</span>
+            <span style="background: #e0d5cb; padding: 4px 18px; border-radius: 40px; font-size: 14px;">📤 ТФГИ — да</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Данные шагов (вопросы + подсказки)
+        const steps = [
+            {
+                question: 'Это связано с лицензией на недра?',
+                hint: 'Подсказка: инспектор сказал про пункт 3 нового Порядка',
+                correctAnswer: false, // Нет
+                explanation: 'Верно! Нарушение не связано с лицензией на недра.'
+            },
+            {
+                question: 'Это бумажный документ?',
+                hint: 'Уточнение: речь идёт об электронной процедуре',
+                correctAnswer: false, // Нет
+                explanation: 'Правильно! Это не бумажный документ, а электронная процедура.'
+            },
+            {
+                question: 'Это нужно было сделать сразу до начала бурения?',
+                hint: 'Обратите внимание: «после начала добычи»',
+                correctAnswer: false, // Нет
+                explanation: 'Верно! Это делается после начала добычи, а не до бурения.'
+            },
+            {
+                question: 'Это нужно было сделать в течение 15 рабочих дней?',
+                hint: 'Срок: 15 рабочих дней',
+                correctAnswer: true, // Да
+                explanation: 'Да, именно 15 рабочих дней — ключевой срок.'
+            },
+            {
+                question: 'Это нужно отправить в ТФГИ?',
+                hint: 'Территориальный фонд геологической информации',
+                correctAnswer: true, // Да
+                explanation: 'Верно! Отправка в ТФГИ через ЛК недропользователя.'
+            }
+        ];
+
+        let currentStep = 0;          // индекс текущего шага (0..4)
+        const totalSteps = steps.length;
+        let stepCompleted = false;    // флаг: завершён ли текущий шаг (правильный ответ)
+        let allDone = false;
+
+        const container = document.getElementById('questionContainer');
+        const indicator = document.getElementById('stepIndicator');
+        const finalBlock = document.getElementById('finalBlock');
+
+        // Функция обновления индикатора
+        function updateIndicator() {
+            const dots = indicator.querySelectorAll('.step-dot');
+            dots.forEach((dot, idx) => {
+                dot.classList.remove('active', 'done');
+                if (idx === currentStep) dot.classList.add('active');
+                else if (idx < currentStep) dot.classList.add('done');
+            });
+        }
+
+        // Рендер текущего шага
+        function renderStep() {
+            // Если все шаги пройдены — показываем финал
+            if (currentStep >= totalSteps) {
+                container.innerHTML = '';
+                finalBlock.classList.remove('hidden');
+                // скрываем кнопку "дальше", если есть
+                return;
+            }
+
+            finalBlock.classList.add('hidden');
+            const step = steps[currentStep];
+            const isLast = (currentStep === totalSteps - 1);
+
+            let html = `
+                <div class="question-box">
+                    <div class="question-text">${step.question}</div>
+                    <div class="question-hint">${step.hint}</div>
+                    <div class="options">
+                        <button class="btn-option" data-value="true">✅ Да</button>
+                        <button class="btn-option" data-value="false">❌ Нет</button>
+                    </div>
+                    <div id="feedbackArea" class="feedback" style="margin-top:20px; background: #f4ede8; border-left-color: #d1bfb2;">
+                        <span class="emoji-big">💬</span>
+                        <span id="feedbackText">Выберите вариант ответа</span>
+                    </div>
+                </div>
+                <div class="next-step-wrap">
+                    <button class="btn-next" id="nextBtn" disabled>➜ Далее</button>
+                </div>
+            `;
+            container.innerHTML = html;
+
+            // Сброс флага
+            stepCompleted = false;
+
+            // Обработчики для кнопок "Да"/"Нет"
+            const optionBtns = container.querySelectorAll('.btn-option');
+            const feedbackArea = container.querySelector('#feedbackArea');
+            const feedbackText = container.querySelector('#feedbackText');
+            const nextBtn = container.querySelector('#nextBtn');
+
+            // Функция для сброса стилей всех кнопок
+            function resetOptions() {
+                optionBtns.forEach(btn => {
+                    btn.classList.remove('correct', 'wrong');
+                    btn.disabled = false;
+                });
+            }
+
+            // Блокировка всех кнопок после ответа
+            function disableOptions() {
+                optionBtns.forEach(btn => btn.disabled = true);
+            }
+
+            // Обработка клика по варианту
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    // если уже завершён шаг или все пройдено — игнор
+                    if (stepCompleted || allDone) return;
+
+                    const selected = this.dataset.value === 'true'; // true/false
+                    const isCorrect = (selected === step.correctAnswer);
+
+                    // Сброс стилей (на всякий случай)
+                    resetOptions();
+
+                    // Подсветка правильного/неправильного
+                    if (isCorrect) {
+                        this.classList.add('correct');
+                        feedbackArea.className = 'feedback success';
+                        feedbackText.innerHTML = `✅ ${step.explanation}`;
+                        stepCompleted = true;
+                        nextBtn.disabled = false;
+                        nextBtn.classList.add('enabled');
+                    } else {
+                        this.classList.add('wrong');
+                        feedbackArea.className = 'feedback error';
+                        const wrongMsg = selected ? 'Неверно, ответ "Нет"' : 'Неверно, ответ "Да"';
+                        feedbackText.innerHTML = `❌ ${wrongMsg}. Попробуйте ещё раз.`;
+                        // кнопка "Далее" остаётся заблокированной
+                        // но кнопки остаются активными для повторной попытки — разблокируем их
+                        // только те, которые не wrong (кроме нажатой)
+                        optionBtns.forEach(b => {
+                            if (b !== this) b.disabled = false;
+                        });
+                        // но нажатая остаётся disabled, чтобы нельзя было нажать повторно
+                        this.disabled = true;
+                        // дополнительно: стиль wrong не снимаем
+                    }
+
+                    // Если правильно — блокируем все кнопки (уже сделано через disableOptions? но мы не вызывали)
+                    if (isCorrect) {
+                        disableOptions();
+                    }
+                });
+            });
+
+            // Обработчик "Далее"
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    if (!stepCompleted) return;
+                    // Переход к следующему шагу
+                    currentStep++;
+                    // если это был последний шаг, то currentStep станет totalSteps
+                    if (currentStep >= totalSteps) {
+                        // все пройдены
+                        allDone = true;
+                        // обновить индикатор
+                        updateIndicator();
+                        renderStep(); // вызовет отображение финала
+                    } else {
+                        updateIndicator();
+                        renderStep();
+                    }
+                });
+            }
+
+            // Обновление индикатора
+            updateIndicator();
+        }
+
+        // Первоначальный рендер
+        renderStep();
+
+        // Дополнительно: обработка клика по индикатору (переход только по завершённым шагам)
+        indicator.querySelectorAll('.step-dot').forEach(dot => {
+            dot.addEventListener('click', function() {
+                const stepIndex = parseInt(this.dataset.step, 10);
+                // разрешаем переход только если шаг уже завершён (done) или это текущий
+                if (stepIndex < currentStep) {
+                    // можно переключиться на уже пройденный шаг
+                    currentStep = stepIndex;
+                    stepCompleted = true; // считаем что он завершён
+                    // но если мы переключаемся на пройденный шаг, надо показать его с правильным ответом
+                    // Однако для простоты мы перерендерим, но с сохранением состояния завершённости шага
+                    // Но у нас нет сохранения ответов, поэтому мы просто переходим и показываем заново без выбора.
+                    // Для да-нетки лучше запретить переход назад, чтобы не сбивать логику.
+                    // Ограничим: разрешим только переход к предыдущим, но сбросим состояние.
+                    // Но мы сделаем проще: перезапустим шаг с чистого состояния.
+                    // Но это нарушает "поэтапное прохождение". Мы переделаем: переход назад разрешён, но шаг сбрасывается.
+                    // Это приемлемо.
+                    // Для этого сбросим флаг stepCompleted и перерендерим
+                    stepCompleted = false;
+                    // также сбросим allDone если он был true
+                    allDone = false;
+                    renderStep();
+                } else if (stepIndex === currentStep) {
+                    // ничего не делаем, просто остаёмся
+                } else {
+                    // нельзя перейти на будущий шаг
+                }
+            });
+        });
+
+    })();
+</script>
+
+</body>
+</html>
