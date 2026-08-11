@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактив «Замкнутый цикл»</title>
+    <style>
+        /* ===== БАЗОВЫЕ СТИЛИ ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f0ebe6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 32px 30px 40px;
+            box-shadow: 0 12px 40px rgba(140, 120, 110, 0.15);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        /* ===== ПАСТЕЛЬНАЯ ГАММА ===== */
+        :root {
+            --pastel-green: #d4e9d6;
+            --pastel-blue: #d3e5ed;
+            --pastel-peach: #fde8d8;
+            --pastel-lavender: #e6dce8;
+            --pastel-mint: #d4e9e2;
+            --pastel-rose: #f5dcdc;
+            --accent: #8aa68b;
+            --accent-dark: #5e7a5f;
+            --text: #3d3a36;
+            --text-light: #6b6560;
+            --shadow: rgba(130, 115, 100, 0.08);
+        }
+
+        /* ===== ШАГИ ===== */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 0 4px;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 28px;
+            right: 28px;
+            height: 3px;
+            background: #e5ddd6;
+            z-index: 0;
+            border-radius: 4px;
+        }
+
+        .step-dot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            background: white;
+            padding: 0 4px;
+            cursor: default;
+            gap: 4px;
+        }
+
+        .step-dot .circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ece6df;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #8f8881;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step-dot.active .circle {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent-dark);
+            box-shadow: 0 4px 12px rgba(138, 166, 139, 0.35);
+        }
+
+        .step-dot.done .circle {
+            background: var(--pastel-green);
+            color: var(--accent-dark);
+            border-color: var(--accent);
+        }
+
+        .step-dot .label {
+            font-size: 10px;
+            color: #9e958e;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 56px;
+        }
+
+        .step-dot.active .label {
+            color: var(--accent-dark);
+            font-weight: 600;
+        }
+
+        /* ===== КАРТОЧКА ШАГА ===== */
+        .step-card {
+            background: #faf8f6;
+            border-radius: 24px;
+            padding: 28px 26px 24px;
+            margin-bottom: 20px;
+            border: 1px solid #f0eae4;
+            transition: all 0.25s;
+            min-height: 280px;
+        }
+
+        .step-card .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .step-card h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+            letter-spacing: -0.2px;
+        }
+
+        .step-card .sub {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .step-card .question {
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text);
+            margin: 18px 0 12px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 14px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .step-card .hint {
+            font-size: 13px;
+            color: #9b9088;
+            background: #f3efe9;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin: 8px 0 16px;
+            font-style: italic;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .step-card .hint::before {
+            content: '💡';
+            font-style: normal;
+            font-size: 16px;
+        }
+
+        /* ===== ПОЛЯ ВВОДА ===== */
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 16px;
+            background: white;
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin: 10px 0 8px;
+            border: 1px solid #ede7e0;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            color: var(--text);
+            font-size: 15px;
+            min-width: 120px;
+            flex: 1 0 auto;
+        }
+
+        .input-group input {
+            border: 1px solid #dbd2c9;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 16px;
+            width: 120px;
+            font-weight: 500;
+            color: var(--text);
+            background: #fcfaf8;
+            transition: 0.2s;
+            flex: 0 0 auto;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(138, 166, 139, 0.2);
+            background: white;
+        }
+
+        .input-group .unit {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        /* ===== КНОПКИ ===== */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ece6df;
+            color: #6b6560;
+            flex: 1 0 auto;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(138, 166, 139, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 166, 139, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #f3efe9;
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #e8e0d8;
+        }
+
+        .btn-success {
+            background: #c7dcc8;
+            color: #2f4d30;
+        }
+
+        .btn-success:hover {
+            background: #b0ccb1;
+        }
+
+        .btn-pdf {
+            background: #f5dcdc;
+            color: #7a4f4f;
+        }
+
+        .btn-pdf:hover {
+            background: #edc8c8;
+        }
+
+        /* ===== РЕЗУЛЬТАТ ===== */
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 16px 0 20px;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid #ede7e0;
+            text-align: center;
+        }
+
+        .result-card .number {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--accent-dark);
+            margin-top: 4px;
+        }
+
+        .result-card .number.red {
+            color: #b16a6a;
+        }
+
+        .result-card .number.green {
+            color: #4f8a5e;
+        }
+
+        .result-card .label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .result-card .sub-label {
+            font-size: 12px;
+            color: #a89f97;
+        }
+
+        .result-detail {
+            background: white;
+            border-radius: 16px;
+            padding: 18px 20px;
+            border: 1px solid #ede7e0;
+            margin: 10px 0 16px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .result-detail strong {
+            color: var(--accent-dark);
+        }
+
+        .result-detail .highlight {
+            background: var(--pastel-mint);
+            padding: 2px 8px;
+            border-radius: 8px;
+        }
+
+        .final-message {
+            background: var(--pastel-peach);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin: 14px 0 10px;
+            font-size: 15px;
+            line-height: 1.6;
+            border-left: 4px solid #dbb594;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 14px 28px;
+                border-radius: 24px;
+            }
+            .step-card {
+                padding: 20px 16px;
+            }
+            .step-card h2 {
+                font-size: 18px;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 14px;
+            }
+            .input-group input {
+                width: 100%;
+            }
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            .step-dot .label {
+                font-size: 8px;
+                max-width: 40px;
+            }
+            .step-dot .circle {
+                width: 30px;
+                height: 30px;
+                font-size: 13px;
+            }
+            .step-indicator::before {
+                top: 15px;
+                left: 16px;
+                right: 16px;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 701px) {
+            .container {
+                width: 700px;
+            }
+        }
+
+        /* ===== ИКОНКИ ===== */
+        .icon-bg {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: var(--pastel-mint);
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .icon-bg.blue {
+            background: var(--pastel-blue);
+        }
+        .icon-bg.peach {
+            background: var(--pastel-peach);
+        }
+        .icon-bg.lavender {
+            background: var(--pastel-lavender);
+        }
+        .icon-bg.rose {
+            background: var(--pastel-rose);
+        }
+
+        /* Скрытые элементы */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Анимация появления */
+        .fade-in {
+            animation: fadeUp 0.4s ease-out;
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        <!-- ШАГИ -->
+        <div class="step-indicator" id="stepIndicator">
+            <div class="step-dot active" data-step="0">
+                <div class="circle">1</div>
+                <span class="label">Исходные данные</span>
+            </div>
+            <div class="step-dot" data-step="1">
+                <div class="circle">2</div>
+                <span class="label">Сценарий А</span>
+            </div>
+            <div class="step-dot" data-step="2">
+                <div class="circle">3</div>
+                <span class="label">Сценарий Б</span>
+            </div>
+            <div class="step-dot" data-step="3">
+                <div class="circle">4</div>
+                <span class="label">Точка выбора</span>
+            </div>
+            <div class="step-dot" data-step="4">
+                <div class="circle">5</div>
+                <span class="label">Сценарий В</span>
+            </div>
+            <div class="step-dot" data-step="5">
+                <div class="circle">6</div>
+                <span class="label">Итог</span>
+            </div>
+        </div>
+
+        <!-- КОНТЕЙНЕР ШАГОВ -->
+        <div id="stepContainer" class="fade-in">
+            <!-- Шаг 0: Исходные данные -->
+            <div class="step-card" id="step0">
+                <div class="icon-bg">📊</div>
+                <h2>Исходные данные</h2>
+                <div class="sub">Введите параметры вашего предприятия (или оставьте значения по умолчанию).</div>
+
+                <div class="input-group">
+                    <label>Осадка в месяц</label>
+                    <input type="number" id="monthlyTons" value="10" step="0.5" min="0.1">
+                    <span class="unit">т</span>
+                </div>
+                <div class="input-group">
+                    <label>Цена вывоза 1 т</label>
+                    <input type="number" id="disposalPrice" value="1600" step="100" min="100">
+                    <span class="unit">руб.</span>
+                </div>
+                <div class="input-group">
+                    <label>Тариф НВОС за 1 т</label>
+                    <input type="number" id="nvosTarif" value="1046.494" step="10" min="0">
+                    <span class="unit">руб.</span>
+                </div>
+                <div class="input-group">
+                    <label>Цена 1 м³ грунта</label>
+                    <input type="number" id="groundPrice" value="450" step="10" min="50">
+                    <span class="unit">руб.</span>
+                </div>
+                <div class="input-group">
+                    <label>Площадь полигона</label>
+                    <input type="number" id="polygonArea" value="15" step="0.5" min="0.5">
+                    <span class="unit">га</span>
+                </div>
+                <div class="input-group">
+                    <label>Слой изоляции</label>
+                    <input type="number" id="isolationLayer" value="0.25" step="0.01" min="0.05">
+                    <span class="unit">м</span>
+                </div>
+                <div class="input-group">
+                    <label>Финальный слой</label>
+                    <input type="number" id="finalLayer" value="0.40" step="0.01" min="0.10">
+                    <span class="unit">м</span>
+                </div>
+                <div class="input-group">
+                    <label>Стоимость установки</label>
+                    <input type="number" id="plantCost" value="20000000" step="1000000" min="1000000">
+                    <span class="unit">руб.</span>
+                </div>
+                <div class="input-group">
+                    <label>Себестоимость переработки 1 т</label>
+                    <input type="number" id="processingCost" value="400" step="20" min="50">
+                    <span class="unit">руб.</span>
+                </div>
+
+                <div class="hint">💡 Подсказка: все цифры можно менять на каждом шаге — они будут подхватываться автоматически.</div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="nextStep()">Далее →</button>
+                </div>
+            </div>
+
+            <!-- Шаг 1: Сценарий А -->
+            <div class="step-card hidden" id="step1">
+                <div class="icon-bg peach">💰</div>
+                <h2>Сценарий А: «Бизнес как всегда»</h2>
+                <div class="sub">Вы вывозите осадок на полигон. Посчитайте, сколько денег уходит впустую.</div>
+
+                <div class="question">Сколько рублей вы теряете за 5 лет только на вывозе и НВОС?</div>
+
+                <div class="input-group">
+                    <label>Введите ваш расчёт (за 5 лет)</label>
+                    <input type="number" id="userLoss5" step="100000" min="0">
+                    <span class="unit">руб.</span>
+                </div>
+
+                <div class="hint">💡 Подсказка: сначала посчитайте годовой вывоз + НВОС, затем умножьте на 5.</div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Назад</button>
+                    <button class="btn btn-primary" onclick="checkStep1()">Проверить</button>
+                </div>
+                <div id="feedback1" style="margin-top:12px; font-weight:500;"></div>
+            </div>
+
+            <!-- Шаг 2: Сценарий Б -->
+            <div class="step-card hidden" id="step2">
+                <div class="icon-bg blue">🏗️</div>
+                <h2>Сценарий Б: «Полигон платит»</h2>
+                <div class="sub">А теперь посчитайте, сколько полигон тратит на изоляцию вашего осадка за 5 лет.</div>
+
+                <div class="question">Сколько рублей полигон потратит на грунт для изоляции вашего осадка за 5 лет?</div>
+
+                <div class="input-group">
+                    <label>Введите ваш расчёт (за 5 лет)</label>
+                    <input type="number" id="userPolygonCost" step="100000" min="0">
+                    <span class="unit">руб.</span>
+                </div>
+
+                <div class="hint">💡 Подсказка: 1 га = 10 000 м². Объём грунта = площадь × толщина слоя. Не забудьте умножить на цену и на 5 лет.</div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Назад</button>
+                    <button class="btn btn-primary" onclick="checkStep2()">Проверить</button>
+                </div>
+                <div id="feedback2" style="margin-top:12px; font-weight:500;"></div>
+            </div>
+
+            <!-- Шаг 3: Точка бифуркации -->
+            <div class="step-card hidden" id="step3">
+                <div class="icon-bg lavender">⚡</div>
+                <h2>Точка бифуркации</h2>
+                <div class="sub">Вы знаете свои потери и траты полигона. Теперь вопрос на засыпку.</div>
+
+                <div class="question">Сколько, по вашему мнению, стоит установка по переработке осадка в техногрунт?</div>
+
+                <div class="input-group">
+                    <label>Ваша оценка стоимости</label>
+                    <input type="number" id="userPlantEstimate" step="500000" min="1000000">
+                    <span class="unit">руб.</span>
+                </div>
+
+                <div class="hint">💡 Подсказка: реальный рынок — от 15 до 40 млн руб. в зависимости от производительности. Прикиньте свой вариант.</div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Назад</button>
+                    <button class="btn btn-primary" onclick="checkStep3()">Далее</button>
+                </div>
+                <div id="feedback3" style="margin-top:12px; font-weight:500;"></div>
+            </div>
+
+            <!-- Шаг 4: Сценарий В -->
+            <div class="step-card hidden" id="step4">
+                <div class="icon-bg rose">♻️</div>
+                <h2>Сценарий В: «Замкнутый цикл»</h2>
+                <div class="sub">Вы перерабатываете осадок и продаёте грунт полигону. Посчитайте выгоду.</div>
+
+                <div class="question">Сколько рублей вы сэкономите (включая продажу грунта) за 5 лет?</div>
+
+                <div class="input-group">
+                    <label>Введите ваш расчёт (экономия за 5 лет)</label>
+                    <input type="number" id="userBenefit5" step="100000" min="0">
+                    <span class="unit">руб.</span>
+                </div>
+
+                <div class="hint">💡 Подсказка: (старые затраты — новые затраты) + доход от продажи грунта. Всё за 5 лет.</div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Назад</button>
+                    <button class="btn btn-primary" onclick="checkStep4()">Проверить</button>
+                </div>
+                <div id="feedback4" style="margin-top:12px; font-weight:500;"></div>
+            </div>
+
+            <!-- Шаг 5: Итог -->
+            <div class="step-card hidden" id="step5">
+                <div class="icon-bg" style="background:#d4e9e2;">🏆</div>
+                <h2>Ваш финансовый диагноз</h2>
+                <div class="sub">Вот что получилось, если сравнить все сценарии.</div>
+
+                <div id="resultContainer">
+                    <!-- сюда будет вставлен результат -->
+                </div>
+
+                <div class="actions" style="margin-top:18px;">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Назад</button>
+                    <button class="btn btn-pdf" onclick="downloadPDF()">📄 Скачать PDF</button>
+                    <button class="btn btn-success" onclick="resetAll()">🔄 Начать заново</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 1. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        // ============================================================
+
+        function getVal(id) {
+            return parseFloat(document.getElementById(id).value) || 0;
+        }
+
+        function setVal(id, val) {
+            document.getElementById(id).value = val;
+        }
+
+        function showStep(n) {
+            for (let i = 0; i <= 5; i++) {
+                const el = document.getElementById('step' + i);
+                if (el) el.classList.toggle('hidden', i !== n);
+            }
+            // обновить индикатор
+            const dots = document.querySelectorAll('.step-dot');
+            dots.forEach((dot, idx) => {
+                dot.classList.remove('active', 'done');
+                if (idx === n) dot.classList.add('active');
+                else if (idx < n) dot.classList.add('done');
+            });
+            // анимация
+            const card = document.getElementById('step' + n);
+            if (card) {
+                card.classList.remove('fade-in');
+                void card.offsetWidth;
+                card.classList.add('fade-in');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let currentStep = 0;
+
+        function nextStep() {
+            if (currentStep < 5) {
+                currentStep++;
+                showStep(currentStep);
+                // если перешли на итог — сгенерировать
+                if (currentStep === 5) generateResult();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        // ============================================================
+        // 2. РАСЧЁТЫ (эталонные значения)
+        // ============================================================
+
+        function calcAll() {
+            const mT = getVal('monthlyTons');
+            const dP = getVal('disposalPrice');
+            const nv = getVal('nvosTarif');
+            const gP = getVal('groundPrice');
+            const ha = getVal('polygonArea');
+            const iso = getVal('isolationLayer');
+            const fin = getVal('finalLayer');
+            const pc = getVal('plantCost');
+            const proc = getVal('processingCost');
+
+            const areaM2 = ha * 10000;
+
+            // Сценарий А: потери за 5 лет
+            const yearlyDisposal = mT * 12 * dP;
+            const yearlyNVOS = mT * 12 * nv;
+            const lossYear = yearlyDisposal + yearlyNVOS;
+            const loss5 = lossYear * 5;
+
+            // Сценарий Б: траты полигона на грунт за 5 лет (только промежуточная изоляция)
+            const volumePerYear = areaM2 * iso; // м³ в год (один слой)
+            const groundCostYear = volumePerYear * gP;
+            const polygonCost5 = groundCostYear * 5;
+
+            // Сценарий В: выгода за 5 лет (экономия + продажа грунта)
+            const newYearlyCost = mT * 12 * proc;
+            const yearlySavings = lossYear - newYearlyCost;
+            const yearlyIncome = mT * 12 * gP; // продаём грунт по той же цене
+            const benefitYear = yearlySavings + yearlyIncome;
+            const benefit5 = benefitYear * 5;
+
+            // Окупаемость
+            const payback = benefitYear > 0 ? pc / benefitYear : Infinity;
+
+            return {
+                loss5,
+                polygonCost5,
+                benefit5,
+                payback,
+                lossYear,
+                polygonCostYear: groundCostYear,
+                benefitYear,
+                areaM2,
+                volumePerYear
+            };
+        }
+
+        // ============================================================
+        // 3. ПРОВЕРКА ШАГОВ
+        // ============================================================
+
+        function checkStep1() {
+            const user = getVal('userLoss5');
+            const correct = Math.round(calcAll().loss5);
+            const diff = Math.abs(user - correct);
+            const fb = document.getElementById('feedback1');
+            if (diff < 50000) {
+                fb.innerHTML = '✅ Отлично! Совпадает с расчётом. За 5 лет вы теряете <strong>' + correct.toLocaleString() +
+                    ' руб.</strong>';
+                fb.style.color = '#2f6b3a';
+                document.querySelector('#step1 .btn-primary').disabled = false;
+                document.querySelector('#step1 .btn-primary').onclick = function() { nextStep(); };
+            } else {
+                fb.innerHTML =
+                    '❌ Не совсем. Подсказка: годовой вывоз = тонн/мес × 12 × цена вывоза. НВОС = тонн/мес × 12 × тариф. Сложите и умножьте на 5. Попробуйте ещё раз.';
+                fb.style.color = '#b16a6a';
+                // не даём перейти дальше
+            }
+        }
+
+        function checkStep2() {
+            const user = getVal('userPolygonCost');
+            const correct = Math.round(calcAll().polygonCost5);
+            const diff = Math.abs(user - correct);
+            const fb = document.getElementById('feedback2');
+            if (diff < 50000) {
+                fb.innerHTML = '✅ Верно! За 5 лет полигон тратит на изоляцию <strong>' + correct.toLocaleString() +
+                    ' руб.</strong>';
+                fb.style.color = '#2f6b3a';
+                document.querySelector('#step2 .btn-primary').disabled = false;
+                document.querySelector('#step2 .btn-primary').onclick = function() { nextStep(); };
+            } else {
+                fb.innerHTML =
+                    '❌ Попробуйте ещё. Объём грунта = (площадь в га × 10 000) × толщину слоя. Умножьте на цену за м³ и на 5 лет.';
+                fb.style.color = '#b16a6a';
+            }
+        }
+
+        function checkStep3() {
+            const user = getVal('userPlantEstimate');
+            const fb = document.getElementById('feedback3');
+            if (user >= 1000000 && user <= 60000000) {
+                fb.innerHTML = '✅ Принято. Теперь переходим к расчёту выгоды.';
+                fb.style.color = '#2f6b3a';
+                document.querySelector('#step3 .btn-primary').disabled = false;
+                document.querySelector('#step3 .btn-primary').onclick = function() { nextStep(); };
+            } else {
+                fb.innerHTML = '❌ Введите реалистичную сумму (от 1 млн до 60 млн руб.).';
+                fb.style.color = '#b16a6a';
+            }
+        }
+
+        function checkStep4() {
+            const user = getVal('userBenefit5');
+            const correct = Math.round(calcAll().benefit5);
+            const diff = Math.abs(user - correct);
+            const fb = document.getElementById('feedback4');
+            if (diff < 50000) {
+                fb.innerHTML = '✅ Блестяще! За 5 лет выгода составит <strong>' + correct.toLocaleString() + ' руб.</strong>';
+                fb.style.color = '#2f6b3a';
+                document.querySelector('#step4 .btn-primary').disabled = false;
+                document.querySelector('#step4 .btn-primary').onclick = function() { nextStep(); };
+            } else {
+                fb.innerHTML =
+                    '❌ Проверьте расчёт. Экономия = (старые затраты — новые затраты) + доход от продажи грунта. Всё за 5 лет.';
+                fb.style.color = '#b16a6a';
+            }
+        }
+
+        // ============================================================
+        // 4. ГЕНЕРАЦИЯ ИТОГА
+        // ============================================================
+
+        function generateResult() {
+            const d = calcAll();
+            const container = document.getElementById('resultContainer');
+
+            const userLoss = getVal('userLoss5');
+            const userPolygon = getVal('userPolygonCost');
+            const userBenefit = getVal('userBenefit5');
+            const userPlant = getVal('userPlantEstimate');
+
+            const paybackYears = d.benefitYear > 0 ? (userPlant / d.benefitYear) : Infinity;
+            const paybackStr = paybackYears < 100 ? paybackYears.toFixed(1) + ' лет' : 'более 100 лет';
+
+            container.innerHTML = `
+                <div class="result-grid">
+                    <div class="result-card">
+                        <div class="label">Сценарий А (потери за 5 лет)</div>
+                        <div class="number red">${d.loss5.toLocaleString()} ₽</div>
+                        <div class="sub-label">вы угадали: ${userLoss > 0 ? '✅' : '—'}</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Сценарий Б (траты полигона за 5 лет)</div>
+                        <div class="number red">${d.polygonCost5.toLocaleString()} ₽</div>
+                        <div class="sub-label">вы угадали: ${userPolygon > 0 ? '✅' : '—'}</div>
+                    </div>
+                    <div class="result-card" style="grid-column: 1 / -1; background: var(--pastel-green);">
+                        <div class="label">Сценарий В (ваша выгода за 5 лет)</div>
+                        <div class="number green">+${d.benefit5.toLocaleString()} ₽</div>
+                        <div class="sub-label">вы угадали: ${userBenefit > 0 ? '✅' : '—'}</div>
+                    </div>
+                </div>
+
+                <div class="result-detail">
+                    <strong>Детали:</strong><br>
+                    • Ежегодные потери по сценарию А: <strong>${d.lossYear.toLocaleString()} ₽</strong><br>
+                    • Ежегодные траты полигона на грунт: <strong>${d.polygonCostYear.toLocaleString()} ₽</strong><br>
+                    • Ежегодная выгода по сценарию В: <strong>${d.benefitYear.toLocaleString()} ₽</strong><br>
+                    • Ваша оценка стоимости установки: <strong>${userPlant > 0 ? userPlant.toLocaleString() : 'не указана'} ₽</strong><br>
+                    • Окупаемость установки: <strong>${paybackStr}</strong>
+                </div>
+
+                <div class="final-message">
+                    <strong>🏁 Главный вывод:</strong><br>
+                    Если установка стоит <strong>${userPlant > 0 ? userPlant.toLocaleString() : '…'} ₽</strong>,
+                    а за 5 лет вы экономите <strong>${d.benefit5.toLocaleString()} ₽</strong>,
+                    то <span class="highlight">чистая прибыль за 5 лет составит <strong>${(d.benefit5 - (userPlant || d.plantCost)).toLocaleString()} ₽</strong></span>.
+                    <br><br>
+                    <em>«Осадок — это не отход, а ресурс. Выбор за вами: платить или зарабатывать».</em>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // 5. PDF
+        // ============================================================
+
+        function downloadPDF() {
+            // Простой экспорт: открываем окно печати с сохранением в PDF
+            // Добавляем временный стиль для печати
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @media print {
+                    body { background: white; }
+                    .container { box-shadow: none; border: 1px solid #ddd; }
+                    .btn, .actions .btn { display: none !important; }
+                    .step-indicator { display: none !important; }
+                    .step-card { border: none !important; background: white !important; }
+                    .hidden { display: block !important; }
+                    #step0, #step1, #step2, #step3, #step4 { display: none !important; }
+                    #step5 { display: block !important; }
+                    .result-card { border: 1px solid #ccc; }
+                    .final-message { border: 1px solid #ccc; }
+                }
+            `;
+            document.head.appendChild(style);
+            window.print();
+            document.head.removeChild(style);
+        }
+
+        // ============================================================
+        // 6. СБРОС
+        // ============================================================
+
+        function resetAll() {
+            // сброс всех полей ввода, кроме исходных
+            ['userLoss5', 'userPolygonCost', 'userPlantEstimate', 'userBenefit5'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            // очищаем фидбеки
+            for (let i = 1; i <= 4; i++) {
+                const fb = document.getElementById('feedback' + i);
+                if (fb) { fb.innerHTML = '';
+                    fb.style.color = ''; }
+            }
+            // возвращаем кнопки
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.querySelector('#step' + i + ' .btn-primary');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.onclick = function() {
+                        // привязываем проверку
+                        if (i === 1) checkStep1();
+                        else if (i === 2) checkStep2();
+                        else if (i === 3) checkStep3();
+                        else if (i === 4) checkStep4();
+                    };
+                }
+            }
+            // показать шаг 0
+            currentStep = 0;
+            showStep(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // 7. ИНИЦИАЛИЗАЦИЯ
+        // ============================================================
+
+        // Назначаем обработчики на кнопки "Проверить" при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Шаг 1
+            document.querySelector('#step1 .btn-primary').onclick = checkStep1;
+            // Шаг 2
+            document.querySelector('#step2 .btn-primary').onclick = checkStep2;
+            // Шаг 3
+            document.querySelector('#step3 .btn-primary').onclick = checkStep3;
+            // Шаг 4
+            document.querySelector('#step4 .btn-primary').onclick = checkStep4;
+
+            // Показываем первый шаг
+            showStep(0);
+        });
+
+        // Поддержка Enter в полях ввода (для удобства)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const target = e.target;
+                if (target.tagName === 'INPUT') {
+                    // найти кнопку "Проверить" или "Далее" в текущем шаге
+                    const step = document.querySelector('.step-card:not(.hidden)');
+                    if (step) {
+                        const btn = step.querySelector('.btn-primary');
+                        if (btn) btn.click();
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
