@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сравнение сценариев затрат</title>
+    <title>Две стороны истории</title>
     <style>
-        /* ===== БАЗОВЫЕ СТИЛИ ===== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,621 +15,99 @@
             background: #f0ebe6;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             min-height: 100vh;
-            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-            padding: 20px;
-            margin: 0;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 16px;
         }
 
         .container {
-            max-width: 700px;
+            max-width: 600px;
             width: 100%;
             background: #ffffff;
-            border-radius: 32px;
-            padding: 32px 30px 40px;
-            box-shadow: 0 12px 40px rgba(140, 120, 110, 0.15);
-            margin: 20px 0;
-        }
-
-        /* ===== ПАСТЕЛЬНАЯ ГАММА ===== */
-        :root {
-            --pastel-green: #d4e9d6;
-            --pastel-blue: #d3e5ed;
-            --pastel-peach: #fde8d8;
-            --pastel-lavender: #e6dce8;
-            --pastel-mint: #d4e9e2;
-            --pastel-rose: #f5dcdc;
-            --accent: #8aa68b;
-            --accent-dark: #5e7a5f;
-            --text: #3d3a36;
-            --text-light: #6b6560;
+            border-radius: 28px;
+            padding: 24px 22px 30px;
+            box-shadow: 0 8px 32px rgba(140, 120, 110, 0.12);
         }
 
         /* ===== ЗАГОЛОВОК ===== */
         .header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid #f0eae4;
-        }
-
-        .header .icon {
-            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
-            color: var(--text);
-            letter-spacing: -0.3px;
-        }
-
-        .header .sub {
-            font-size: 14px;
-            color: var(--text-light);
-            font-weight: 400;
-        }
-
-        /* ===== КАРТОЧКИ ===== */
-        .section {
-            background: #faf8f6;
-            border-radius: 20px;
-            padding: 20px 22px;
-            margin-bottom: 18px;
-            border: 1px solid #f0eae4;
-            transition: all 0.2s;
-        }
-
-        .section:hover {
-            border-color: #e0d6cc;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .section-header .icon {
-            font-size: 26px;
-        }
-
-        .section-header h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .section-header .badge {
-            font-size: 11px;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            margin-left: auto;
-        }
-
-        .badge-green {
-            background: var(--pastel-green);
-            color: var(--accent-dark);
-        }
-        .badge-blue {
-            background: var(--pastel-blue);
-            color: #4a6a7a;
-        }
-        .badge-peach {
-            background: var(--pastel-peach);
-            color: #8a6a5a;
-        }
-        .badge-rose {
-            background: var(--pastel-rose);
-            color: #8a5a5a;
-        }
-        .badge-mint {
-            background: var(--pastel-mint);
-            color: #3a7a6a;
-        }
-
-        .section .desc {
-            font-size: 14px;
-            color: var(--text-light);
-            line-height: 1.5;
-            margin-bottom: 14px;
-        }
-
-        /* ===== ПОЛЯ ВВОДА ===== */
-        .input-group {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px 14px;
-            background: white;
-            padding: 12px 16px;
-            border-radius: 14px;
-            margin: 6px 0 4px;
-            border: 1px solid #ede7e0;
-        }
-
-        .input-group label {
-            font-weight: 500;
-            color: var(--text);
-            font-size: 14px;
-            min-width: 150px;
-            flex: 1 0 auto;
-        }
-
-        .input-group input {
-            border: 1px solid #dbd2c9;
-            border-radius: 10px;
-            padding: 8px 14px;
-            font-size: 15px;
-            width: 120px;
-            font-weight: 500;
-            color: var(--text);
-            background: #fcfaf8;
-            transition: 0.2s;
-            flex: 0 0 auto;
-        }
-
-        .input-group input:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(138, 166, 139, 0.2);
-            background: white;
-        }
-
-        .input-group .unit {
-            font-size: 13px;
-            color: var(--text-light);
-            font-weight: 400;
-        }
-
-        .input-group .hint-icon {
-            font-size: 16px;
-            cursor: help;
-            opacity: 0.5;
-            transition: 0.2s;
-            margin-left: auto;
-        }
-
-        .input-group .hint-icon:hover {
-            opacity: 1;
-        }
-
-        /* ===== ПОДСКАЗКИ ===== */
-        .hint-box {
-            background: #f3efe9;
-            border-radius: 12px;
-            padding: 10px 14px;
-            margin: 8px 0 4px;
-            font-size: 13px;
-            color: #9b9088;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            line-height: 1.5;
-        }
-
-        .hint-box::before {
-            content: '💡';
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        /* ===== КНОПКИ-ТРИГГЕРЫ ===== */
-        .trigger-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 10px 0 6px;
-        }
-
-        .btn-trigger {
-            padding: 14px 20px;
-            border: 2px solid #e0d6cc;
-            border-radius: 16px;
-            background: white;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text);
-            transition: all 0.25s;
+            color: #3d3a36;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-family: inherit;
+            gap: 8px;
         }
 
-        .btn-trigger:hover {
-            border-color: var(--accent);
-            background: #f8f6f4;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(138, 166, 139, 0.15);
-        }
-
-        .btn-trigger:active {
-            transform: translateY(0);
-        }
-
-        .btn-trigger .icon {
-            font-size: 22px;
-        }
-
-        .btn-trigger.active {
-            border-color: var(--accent);
-            background: var(--pastel-green);
-            box-shadow: 0 4px 12px rgba(138, 166, 139, 0.2);
-        }
-
-        .btn-trigger.active-details {
-            border-color: #8aa6b0;
-            background: var(--pastel-blue);
-            box-shadow: 0 4px 12px rgba(138, 166, 176, 0.2);
-        }
-
-        /* ===== СКРЫВАЕМЫЕ БЛОКИ ===== */
-        .toggle-block {
-            display: none;
-            animation: fadeUp 0.4s ease-out;
-        }
-
-        .toggle-block.open {
-            display: block;
-        }
-
-        @keyframes fadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ===== РЕЗУЛЬТАТЫ ===== */
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            margin: 16px 0 20px;
-        }
-
-        .result-card {
-            background: white;
-            border-radius: 16px;
-            padding: 16px 14px;
-            border: 1px solid #ede7e0;
-            text-align: center;
-            transition: 0.2s;
-        }
-
-        .result-card:hover {
-            border-color: #d5cbc1;
-        }
-
-        .result-card .number {
-            font-size: 22px;
-            font-weight: 700;
-            margin-top: 4px;
-            line-height: 1.3;
-        }
-
-        .result-card .number.red {
-            color: #b16a6a;
-        }
-        .result-card .number.blue {
-            color: #5a7f8a;
-        }
-        .result-card .number.green {
-            color: #4f8a5e;
-        }
-        .result-card .number.purple {
-            color: #8a7a9e;
-        }
-        .result-card .number.orange {
-            color: #c4885a;
-        }
-
-        .result-card .label {
-            font-size: 12px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .result-card .sub-label {
-            font-size: 11px;
-            color: #a89f97;
+        .header .sub {
+            font-size: 13px;
+            color: #6b6560;
             margin-top: 2px;
         }
 
-        .result-card .icon-result {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .result-card.highlight-green {
-            background: var(--pastel-green);
-            border-color: #b0c8b0;
-        }
-
-        .result-card.highlight-rose {
-            background: var(--pastel-rose);
-            border-color: #e0c0c0;
-        }
-
-        .result-card.highlight-blue {
-            background: var(--pastel-blue);
-            border-color: #b8c8d0;
-        }
-
-        /* ===== СРАВНИТЕЛЬНАЯ ТАБЛИЦА ===== */
-        .compare-table {
-            background: white;
+        /* ===== ПЕРЕКЛЮЧАТЕЛЬ ===== */
+        .tabs {
+            display: flex;
+            background: #f5f2ee;
             border-radius: 16px;
-            padding: 16px 18px;
-            border: 1px solid #ede7e0;
-            margin: 10px 0 16px;
+            padding: 4px;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            background: transparent;
+            border-radius: 13px;
             font-size: 14px;
-            line-height: 1.8;
-            color: var(--text);
-        }
-
-        .compare-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .compare-table td {
-            padding: 8px 6px;
-            border-bottom: 1px solid #f0eae4;
-        }
-
-        .compare-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .compare-table .label-col {
-            font-weight: 500;
-            color: var(--text-light);
-            width: 40%;
-        }
-
-        .compare-table .value-col {
             font-weight: 600;
-            text-align: right;
+            color: #6b6560;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
-        .compare-table .value-col.red {
-            color: #b16a6a;
-        }
-        .compare-table .value-col.green {
-            color: #4f8a5e;
-        }
-        .compare-table .value-col.blue {
-            color: #5a7f8a;
-        }
-        .compare-table .value-col.purple {
-            color: #8a7a9e;
-        }
-
-        .compare-table .diff-col {
-            text-align: center;
-            font-size: 13px;
-        }
-
-        .compare-table .arrow {
+        .tab-btn .icon {
             font-size: 18px;
         }
 
-        /* ===== ИТОГОВЫЙ ВЫВОД ===== */
-        .final-message {
-            border-radius: 16px;
-            padding: 18px 22px;
-            margin: 14px 0 10px;
-            font-size: 15px;
-            line-height: 1.7;
-        }
-
-        .final-message.best {
-            background: var(--pastel-green);
-            border-left: 4px solid var(--accent-dark);
-        }
-
-        .final-message.worst {
-            background: var(--pastel-rose);
-            border-left: 4px solid #b16a6a;
-        }
-
-        .final-message strong {
-            color: var(--accent-dark);
-        }
-
-        .final-message .highlight {
+        .tab-btn.active {
             background: white;
-            padding: 2px 10px;
-            border-radius: 8px;
-            font-weight: 700;
+            color: #3d3a36;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
-        .final-message .big-number {
-            font-size: 24px;
-            font-weight: 700;
+        .tab-btn:hover:not(.active) {
+            color: #3d3a36;
         }
 
-        /* ===== ДЕТАЛИ ===== */
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px 20px;
-            margin-top: 8px;
+        /* ===== КОНТЕНТ ВКЛАДОК ===== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
         }
 
-        .details-grid .item {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid #f5f2ee;
+        .tab-content.active {
+            display: block;
         }
 
-        .details-grid .item .label {
-            color: var(--text-light);
-            font-size: 14px;
-        }
-
-        .details-grid .item .value {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .details-grid .item .value.red {
-            color: #b16a6a;
-        }
-        .details-grid .item .value.green {
-            color: #4f8a5e;
-        }
-        .details-grid .item .value.blue {
-            color: #5a7f8a;
-        }
-
-        .details-note {
-            margin-top: 12px;
-            padding: 10px 14px;
-            background: #f5f2ee;
-            border-radius: 10px;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        /* ===== КНОПКА PDF ===== */
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #ece6df;
-            color: #6b6560;
-            font-family: inherit;
-        }
-
-        .btn-pdf {
-            background: #f5dcdc;
-            color: #7a4f4f;
-        }
-
-        .btn-pdf:hover {
-            background: #edc8c8;
-            transform: translateY(-2px);
-        }
-
-        .btn-reset {
-            background: #ece6df;
-            color: var(--text);
-        }
-
-        .btn-reset:hover {
-            background: #e0d8ce;
-        }
-
-        /* ===== АДАПТИВНОСТЬ ===== */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px 14px 28px;
-                border-radius: 24px;
-            }
-            .header h1 {
-                font-size: 18px;
-            }
-            .section {
-                padding: 16px 14px;
-            }
-            .input-group {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 12px 14px;
-            }
-            .input-group input {
-                width: 100%;
-            }
-            .input-group .hint-icon {
-                margin-left: 0;
-            }
-            .result-grid {
-                grid-template-columns: 1fr;
-            }
-            .trigger-buttons {
-                grid-template-columns: 1fr;
-            }
-            .compare-table td {
-                display: block;
-                padding: 4px 0;
-                border-bottom: none;
-            }
-            .compare-table tr {
-                display: block;
-                padding: 6px 0;
-                border-bottom: 1px solid #f0eae4;
-            }
-            .compare-table tr:last-child {
-                border-bottom: none;
-            }
-            .compare-table .label-col {
-                width: 100%;
-            }
-            .compare-table .value-col {
-                text-align: left;
-            }
-            .compare-table .diff-col {
-                text-align: left;
-                padding-left: 20px;
-            }
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
-            .actions {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (min-width: 701px) {
-            .container {
-                width: 700px;
-            }
-        }
-
-        /* ===== АНИМАЦИЯ ===== */
-        .fade-in {
-            animation: fadeUp 0.5s ease-out;
-        }
-
-        @keyframes fadeUp {
+        @keyframes fadeIn {
             0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(6px);
             }
             100% {
                 opacity: 1;
@@ -638,634 +115,397 @@
             }
         }
 
-        /* ===== ПРИНТ (для PDF) ===== */
-        @media print {
-            body {
-                background: white;
-                padding: 10px;
+        /* ===== КАРТОЧКИ ===== */
+        .card {
+            background: #faf8f6;
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid #f0eae4;
+        }
+
+        .card .row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid #f0eae4;
+        }
+
+        .card .row:last-child {
+            border-bottom: none;
+        }
+
+        .card .row .icon {
+            font-size: 22px;
+            width: 32px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .card .row .label {
+            font-size: 13px;
+            color: #6b6560;
+            flex: 1;
+        }
+
+        .card .row .value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #3d3a36;
+            text-align: right;
+        }
+
+        .card .row .value.red {
+            color: #b16a6a;
+        }
+        .card .row .value.blue {
+            color: #5a7f8a;
+        }
+        .card .row .value.green {
+            color: #4f8a5e;
+        }
+        .card .row .value.big {
+            font-size: 18px;
+        }
+
+        .card .highlight-box {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 10px;
+            border-left: 3px solid #8aa68b;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #3d3a36;
+        }
+
+        .card .highlight-box .hl {
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        .card .highlight-box .hl.red {
+            background: #f5dcdc;
+            color: #8a4a4a;
+        }
+        .card .highlight-box .hl.blue {
+            background: #d3e5ed;
+            color: #3a5a6a;
+        }
+        .card .highlight-box .hl.green {
+            background: #d4e9d6;
+            color: #3a6a3a;
+        }
+
+        /* ===== СХЕМА-МИНИ ===== */
+        .mini-scheme {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 10px 0;
+            margin: 8px 0;
+        }
+
+        .mini-scheme .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        .mini-scheme .node .lbl {
+            font-size: 9px;
+            color: #6b6560;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .mini-scheme .arrow {
+            font-size: 18px;
+            color: #b0a89e;
+            animation: arrowMove 2s ease-in-out infinite;
+        }
+
+        @keyframes arrowMove {
+            0%,
+            100% {
+                transform: translateX(-3px);
+                opacity: 0.5;
             }
+            50% {
+                transform: translateX(3px);
+                opacity: 1;
+            }
+        }
+
+        .mini-scheme .money-tag {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 10px;
+            background: #f5f2ee;
+            color: #3d3a36;
+        }
+
+        .mini-scheme .money-tag.red {
+            background: #f5dcdc;
+            color: #8a4a4a;
+        }
+        .mini-scheme .money-tag.blue {
+            background: #d3e5ed;
+            color: #3a5a6a;
+        }
+
+        /* ===== БЛОК С РАЗНИЦЕЙ ===== */
+        .diff-block {
+            background: #f5f2ee;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .diff-block .label {
+            font-size: 13px;
+            color: #6b6560;
+        }
+
+        .diff-block .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #b16a6a;
+        }
+
+        .diff-block .value.green {
+            color: #4f8a5e;
+        }
+
+        .diff-block .arrow-icon {
+            font-size: 24px;
+        }
+
+        /* ===== ПОДВАЛ ===== */
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: #9b9088;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #f0eae4;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 480px) {
             .container {
-                box-shadow: none;
-                border: 1px solid #ddd;
-                border-radius: 16px;
+                padding: 16px 14px 20px;
+                border-radius: 20px;
             }
-            .btn,
-            .actions .btn,
-            .btn-trigger {
-                display: none !important;
+            .header h1 {
+                font-size: 17px;
             }
-            .toggle-block {
-                display: block !important;
+            .tab-btn {
+                font-size: 12px;
+                padding: 8px 8px;
             }
-            .section:hover {
-                border-color: #f0eae4 !important;
+            .tab-btn .icon {
+                font-size: 16px;
             }
-            .result-card:hover {
-                border-color: #ede7e0 !important;
+            .card .row .value {
+                font-size: 14px;
             }
-            .input-group input {
-                border: 1px solid #ccc;
-                background: #f9f9f9;
+            .card .row .value.big {
+                font-size: 16px;
             }
-            .hint-box {
-                background: #f5f2ee;
+            .diff-block .value {
+                font-size: 17px;
             }
-            .compare-table td {
-                border-bottom: 1px solid #e0e0e0;
+            .mini-scheme .node {
+                font-size: 20px;
             }
-            .final-message {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .result-card {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .highlight-green {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .highlight-rose {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .highlight-blue {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            .mini-scheme .arrow {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="container fade-in" id="app">
+    <div class="container">
         <!-- ===== ЗАГОЛОВОК ===== -->
         <div class="header">
-            <span class="icon">⚖️</span>
-            <div>
-                <h1>Сравнение сценариев затрат</h1>
-                <div class="sub">Наглядно показываем разницу между тремя подходами к обращению с осадком</div>
-            </div>
+            <h1>
+                <span>⚖️</span>
+                Две стороны истории
+            </h1>
+            <div class="sub">Кто сколько тратит на осадок и грунт</div>
         </div>
 
-        <!-- ===== БЛОК 1: ИСХОДНЫЕ ДАННЫЕ ===== -->
-        <div class="section" id="inputSection">
-            <div class="section-header">
-                <span class="icon">📊</span>
-                <h2>Исходные данные</h2>
-                <span class="badge badge-green">меняйте цифры</span>
-            </div>
-            <div class="desc">Введите параметры вашего предприятия. Значения по умолчанию — из реального кейса мясокомбината.</div>
-
-            <div class="input-group">
-                <label>Осадок в месяц</label>
-                <input type="number" id="monthlyTons" value="10" step="0.5" min="0.1">
-                <span class="unit">тонн</span>
-                <span class="hint-icon" title="Объём осадка сточных вод, который образуется каждый месяц">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Цена вывоза 1 тонны</label>
-                <input type="number" id="disposalPrice" value="1600" step="100" min="100">
-                <span class="unit">руб./т</span>
-                <span class="hint-icon" title="Стоимость транспортировки 1 тонны осадка на полигон">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Тариф НВОС за 1 тонну</label>
-                <input type="number" id="nvosTarif" value="1046.494" step="10" min="0">
-                <span class="unit">руб./т</span>
-                <span class="hint-icon" title="Плата за негативное воздействие на окружающую среду для отходов IV класса опасности">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Цена 1 м³ грунта</label>
-                <input type="number" id="groundPrice" value="450" step="10" min="50">
-                <span class="unit">руб./м³</span>
-                <span class="hint-icon" title="Стоимость покупки 1 кубометра грунта для изоляции или рекультивации">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Площадь полигона</label>
-                <input type="number" id="polygonArea" value="15" step="0.5" min="0.5">
-                <span class="unit">гектаров</span>
-                <span class="hint-icon" title="Общая площадь полигона, куда вывозится осадок">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Толщина слоя изоляции</label>
-                <input type="number" id="isolationLayer" value="0.25" step="0.01" min="0.05">
-                <span class="unit">метров</span>
-                <span class="hint-icon" title="Слой грунта для промежуточной изоляции отходов (по нормам 20–30 см)">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Финальный слой рекультивации</label>
-                <input type="number" id="finalLayer" value="0.40" step="0.01" min="0.10">
-                <span class="unit">метров</span>
-                <span class="hint-icon" title="Плодородный слой при закрытии полигона (по нормам 30–50 см)">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Стоимость установки переработки</label>
-                <input type="number" id="plantCost" value="20000000" step="1000000" min="1000000">
-                <span class="unit">руб.</span>
-                <span class="hint-icon" title="Инвестиции в цех по переработке осадка в техногрунт">ⓘ</span>
-            </div>
-
-            <div class="input-group">
-                <label>Себестоимость переработки 1 т</label>
-                <input type="number" id="processingCost" value="400" step="20" min="50">
-                <span class="unit">руб./т</span>
-                <span class="hint-icon" title="Затраты на обезвоживание, сушку и грануляцию 1 тонны осадка">ⓘ</span>
-            </div>
-
-            <div class="hint-box">
-                💡 Меняйте любые цифры — все расчёты и сравнения пересчитываются автоматически.
-            </div>
-        </div>
-
-        <!-- ===== КНОПКИ-ТРИГГЕРЫ ===== -->
-        <div class="trigger-buttons">
-            <button class="btn-trigger" id="btnResults" onclick="toggleResults()">
-                <span class="icon">📈</span>
-                Посмотреть, что получается за 5 лет
+        <!-- ===== ПЕРЕКЛЮЧАТЕЛЬ ===== -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tab1" onclick="switchTab('tab1')">
+                <span class="icon">🏭</span> Предприятие
             </button>
-            <button class="btn-trigger" id="btnDetails" onclick="toggleDetails()">
-                <span class="icon">📋</span>
-                Посмотреть детальный разбор
+            <button class="tab-btn" data-tab="tab2" onclick="switchTab('tab2')">
+                <span class="icon">🏚️</span> Полигон
             </button>
         </div>
 
-        <!-- ===== БЛОК 2: РЕЗУЛЬТАТЫ ЗА 5 ЛЕТ ===== -->
-        <div class="toggle-block" id="resultsBlock">
-            <div class="section" id="resultSection">
-                <div class="section-header">
-                    <span class="icon">📈</span>
-                    <h2>Что получается за 5 лет</h2>
-                    <span class="badge badge-blue">сравнение</span>
-                </div>
-                <div class="desc">Три сценария: «как есть», «полигон платит за грунт», «переработка осадка».</div>
-
-                <div class="result-grid">
-                    <div class="result-card highlight-rose">
-                        <span class="icon-result">💰</span>
-                        <div class="label">Сценарий А</div>
-                        <div class="number red" id="resultLoss5">—</div>
-                        <div class="sub-label">потери на вывозе + НВОС</div>
+        <!-- ===== ВКЛАДКА 1: ПРЕДПРИЯТИЕ ===== -->
+        <div class="tab-content active" id="tab1">
+            <div class="card">
+                <!-- Схема -->
+                <div class="mini-scheme">
+                    <div class="node">
+                        <span>🏭</span>
+                        <span class="lbl">Завод</span>
                     </div>
-
-                    <div class="result-card highlight-blue">
-                        <span class="icon-result">🏗️</span>
-                        <div class="label">Сценарий Б</div>
-                        <div class="number blue" id="resultPolygonCost">—</div>
-                        <div class="sub-label">траты полигона на грунт</div>
+                    <span class="arrow">➡️</span>
+                    <div class="node">
+                        <span>🚛</span>
+                        <span class="lbl">Вывоз</span>
                     </div>
-
-                    <div class="result-card highlight-green">
-                        <span class="icon-result">♻️</span>
-                        <div class="label">Сценарий В</div>
-                        <div class="number green" id="resultBenefit5">—</div>
-                        <div class="sub-label">выгода от переработки</div>
+                    <span class="arrow">➡️</span>
+                    <div class="node">
+                        <span>🏚️</span>
+                        <span class="lbl">Полигон</span>
                     </div>
                 </div>
 
-                <!-- Сравнительная таблица -->
-                <div class="compare-table" id="compareTable">
-                    <!-- заполняется скриптом -->
+                <!-- Цифры -->
+                <div class="row">
+                    <span class="icon">📦</span>
+                    <span class="label">Осадок в месяц</span>
+                    <span class="value">10 т</span>
                 </div>
-
-                <!-- Финальный вывод -->
-                <div id="finalMessage">
-                    <!-- заполняется скриптом -->
+                <div class="row">
+                    <span class="icon">🚛</span>
+                    <span class="label">Вывоз в месяц</span>
+                    <span class="value red big">1,6 млн ₽</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- ===== БЛОК 3: ДЕТАЛЬНЫЙ РАЗБОР ===== -->
-        <div class="toggle-block" id="detailsBlock">
-            <div class="section" id="detailsSection" style="background: #f8f5f1;">
-                <div class="section-header">
+                <div class="row">
+                    <span class="icon">📅</span>
+                    <span class="label">Вывоз за год</span>
+                    <span class="value red big">19,2 млн ₽</span>
+                </div>
+                <div class="row">
                     <span class="icon">📋</span>
-                    <h2>Детальный разбор</h2>
-                    <span class="badge badge-mint">по годам</span>
-                </div>
-                <div id="detailsContainer" style="background: white; border-radius: 16px; padding: 18px 20px; border: 1px solid #ede7e0; font-size: 14px; line-height: 1.8; color: var(--text);">
-                    <!-- заполняется скриптом -->
+                    <span class="label">НВОС за год</span>
+                    <span class="value blue">~126 тыс. ₽</span>
                 </div>
 
-                <div class="actions">
-                    <button class="btn btn-reset" onclick="resetToDefault()">🔄 Сбросить к стандарту</button>
-                    <button class="btn btn-pdf" onclick="downloadPDF()">📄 Скачать PDF</button>
+                <div class="highlight-box">
+                    <span class="hl red">⬇️ Итог:</span>
+                    Ежегодно предприятие теряет <span class="hl red">19,3 млн ₽</span>
+                    просто на том, чтобы «убрать с глаз долой».
                 </div>
             </div>
         </div>
 
+        <!-- ===== ВКЛАДКА 2: ПОЛИГОН ===== -->
+        <div class="tab-content" id="tab2">
+            <div class="card">
+                <!-- Схема -->
+                <div class="mini-scheme">
+                    <div class="node">
+                        <span>🏚️</span>
+                        <span class="lbl">Полигон</span>
+                    </div>
+                    <span class="arrow">➡️</span>
+                    <div class="node">
+                        <span>🧱</span>
+                        <span class="lbl">Изоляция</span>
+                    </div>
+                    <span class="arrow">➡️</span>
+                    <div class="node">
+                        <span>⛰️</span>
+                        <span class="lbl">Грунт</span>
+                    </div>
+                </div>
+
+                <!-- Цифры -->
+                <div class="row">
+                    <span class="icon">📐</span>
+                    <span class="label">Площадь полигона</span>
+                    <span class="value">15 га</span>
+                </div>
+                <div class="row">
+                    <span class="icon">📏</span>
+                    <span class="label">Слой изоляции</span>
+                    <span class="value">25 см</span>
+                </div>
+                <div class="row">
+                    <span class="icon">🧱</span>
+                    <span class="label">Отсыпка в месяц</span>
+                    <span class="value blue big">~17 млн ₽</span>
+                </div>
+                <div class="row">
+                    <span class="icon">📅</span>
+                    <span class="label">Отсыпка за год</span>
+                    <span class="value red big">~204 млн ₽</span>
+                </div>
+                <div class="row" style="border-top: 1px dashed #f0eae4; padding-top: 8px; margin-top: 4px;">
+                    <span class="icon">🌱</span>
+                    <span class="label">Финальная рекультивация</span>
+                    <span class="value blue">27 млн ₽</span>
+                </div>
+
+                <div class="highlight-box">
+                    <span class="hl blue">⬇️ Итог:</span>
+                    Полигон тратит <span class="hl blue">~204 млн ₽/год</span> на грунт
+                    + <span class="hl blue">27 млн ₽</span> при закрытии.
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== БЛОК СРАВНЕНИЯ ===== -->
+        <div class="diff-block">
+            <span class="label">💰 Разница затрат за 5 лет:</span>
+            <span class="arrow-icon">⚡</span>
+            <span class="value">~924 млн ₽</span>
+            <span style="font-size: 13px; color: #6b6560;">в пользу переработки</span>
+        </div>
+
+        <div class="diff-block" style="background: #d4e9d6; margin-top: 6px;">
+            <span class="label">♻️ Если переработать осадок в грунт:</span>
+            <span class="arrow-icon">➡️</span>
+            <span class="value green">экономия ~1 млрд ₽</span>
+            <span style="font-size: 13px; color: #3a6a3a;">за 5 лет</span>
+        </div>
+
+        <!-- ===== ПОДВАЛ ===== -->
+        <div class="footer-note">
+            💡 Осадок — это не отход, а ресурс.
+            <span style="display: block; font-size: 11px; color: #b0a89e;">Переработка выгодна обеим сторонам</span>
+        </div>
     </div>
 
     <script>
-        // ============================================================
-        // 1. РАСЧЁТЫ
-        // ============================================================
+        function switchTab(tabId) {
+            // Скрыть все вкладки
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Показать нужную
+            document.getElementById(tabId).classList.add('active');
 
-        function calcAll() {
-            const mT = parseFloat(document.getElementById('monthlyTons').value) || 0;
-            const dP = parseFloat(document.getElementById('disposalPrice').value) || 0;
-            const nv = parseFloat(document.getElementById('nvosTarif').value) || 0;
-            const gP = parseFloat(document.getElementById('groundPrice').value) || 0;
-            const ha = parseFloat(document.getElementById('polygonArea').value) || 0;
-            const iso = parseFloat(document.getElementById('isolationLayer').value) || 0;
-            const fin = parseFloat(document.getElementById('finalLayer').value) || 0;
-            const pc = parseFloat(document.getElementById('plantCost').value) || 0;
-            const proc = parseFloat(document.getElementById('processingCost').value) || 0;
-
-            const areaM2 = ha * 10000;
-
-            // Сценарий А: потери за 5 лет
-            const yearlyDisposal = mT * 12 * dP;
-            const yearlyNVOS = mT * 12 * nv;
-            const lossYear = yearlyDisposal + yearlyNVOS;
-            const loss5 = lossYear * 5;
-
-            // Сценарий Б: траты полигона на промежуточную изоляцию за 5 лет
-            const volumePerYear = areaM2 * iso;
-            const groundCostYear = volumePerYear * gP;
-            const polygonCost5 = groundCostYear * 5;
-
-            // Финальная рекультивация (разовый платёж в конце)
-            const finalVolume = areaM2 * fin;
-            const finalCost = finalVolume * gP;
-
-            // Сценарий В: выгода за 5 лет
-            const newYearlyCost = mT * 12 * proc;
-            const yearlySavings = lossYear - newYearlyCost;
-            const yearlyIncome = mT * 12 * gP;
-            const benefitYear = yearlySavings + yearlyIncome;
-            const benefit5 = benefitYear * 5;
-
-            // Окупаемость
-            const payback = benefitYear > 0 ? pc / benefitYear : Infinity;
-
-            // Чистая прибыль за 5 лет с учётом стоимости установки
-            const netProfit5 = benefit5 - pc;
-
-            // Разница между сценариями
-            const diffA_B = Math.abs(loss5 - polygonCost5);
-            const diffA_C = Math.abs(loss5 - benefit5);
-            const diffB_C = Math.abs(polygonCost5 - benefit5);
-
-            // Какой сценарий выгоднее
-            let bestScenario = '';
-            let bestValue = Math.min(loss5, polygonCost5, benefit5);
-            if (bestValue === benefit5) bestScenario = 'В (переработка)';
-            else if (bestValue === polygonCost5) bestScenario = 'Б (полигон платит)';
-            else bestScenario = 'А (как есть)';
-
-            // Какой сценарий дороже
-            let worstScenario = '';
-            let worstValue = Math.max(loss5, polygonCost5, benefit5);
-            if (worstValue === loss5) worstScenario = 'А (как есть)';
-            else if (worstValue === polygonCost5) worstScenario = 'Б (полигон платит)';
-            else worstScenario = 'В (переработка)';
-
-            return {
-                loss5: Math.round(loss5),
-                polygonCost5: Math.round(polygonCost5),
-                finalCost: Math.round(finalCost),
-                benefit5: Math.round(benefit5),
-                payback: payback,
-                netProfit5: Math.round(netProfit5),
-                lossYear: Math.round(lossYear),
-                polygonCostYear: Math.round(groundCostYear),
-                benefitYear: Math.round(benefitYear),
-                areaM2: areaM2,
-                volumePerYear: Math.round(volumePerYear),
-                finalVolume: Math.round(finalVolume),
-                diffA_B: Math.round(diffA_B),
-                diffA_C: Math.round(diffA_C),
-                diffB_C: Math.round(diffB_C),
-                bestScenario: bestScenario,
-                worstScenario: worstScenario,
-                yearlyDisposal: Math.round(yearlyDisposal),
-                yearlyNVOS: Math.round(yearlyNVOS),
-                newYearlyCost: Math.round(newYearlyCost),
-                yearlyIncome: Math.round(yearlyIncome),
-                yearlySavings: Math.round(yearlySavings),
-                mT: mT,
-                dP: dP,
-                nv: nv,
-                gP: gP,
-                ha: ha,
-                iso: iso,
-                fin: fin,
-                pc: pc,
-                proc: proc
-            };
-        }
-
-        // ============================================================
-        // 2. ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
-        // ============================================================
-
-        function updateAll() {
-            const d = calcAll();
-
-            // Основные результаты
-            document.getElementById('resultLoss5').textContent = d.loss5.toLocaleString() + ' ₽';
-            document.getElementById('resultPolygonCost').textContent = d.polygonCost5.toLocaleString() + ' ₽';
-            document.getElementById('resultBenefit5').textContent = d.benefit5.toLocaleString() + ' ₽';
-
-            // Сравнительная таблица
-            const table = document.getElementById('compareTable');
-            table.innerHTML = `
-                <table>
-                    <tr>
-                        <td class="label-col">Сценарий А (вывоз)</td>
-                        <td class="value-col red">${d.loss5.toLocaleString()} ₽</td>
-                        <td class="diff-col">
-                            <span class="arrow">⬇️</span> на ${d.diffA_B.toLocaleString()} ₽
-                        </td>
-                        <td class="value-col blue">${d.polygonCost5.toLocaleString()} ₽</td>
-                        <td class="label-col">Сценарий Б (грунт)</td>
-                    </tr>
-                    <tr>
-                        <td class="label-col">Сценарий А (вывоз)</td>
-                        <td class="value-col red">${d.loss5.toLocaleString()} ₽</td>
-                        <td class="diff-col">
-                            <span class="arrow">⬇️</span> на ${d.diffA_C.toLocaleString()} ₽
-                        </td>
-                        <td class="value-col green">${d.benefit5.toLocaleString()} ₽</td>
-                        <td class="label-col">Сценарий В (переработка)</td>
-                    </tr>
-                    <tr>
-                        <td class="label-col">Сценарий Б (грунт)</td>
-                        <td class="value-col blue">${d.polygonCost5.toLocaleString()} ₽</td>
-                        <td class="diff-col">
-                            <span class="arrow">⬇️</span> на ${d.diffB_C.toLocaleString()} ₽
-                        </td>
-                        <td class="value-col green">${d.benefit5.toLocaleString()} ₽</td>
-                        <td class="label-col">Сценарий В (переработка)</td>
-                    </tr>
-                </table>
-                <div style="margin-top: 12px; font-size: 13px; color: var(--text-light); text-align: center;">
-                    ⚡ Разница между самым дорогим и самым выгодным сценарием: <strong>${Math.max(d.loss5, d.polygonCost5, d.benefit5) - Math.min(d.loss5, d.polygonCost5, d.benefit5)} ₽</strong>
-                </div>
-            `;
-
-            // Финальное сообщение
-            const finalMsg = document.getElementById('finalMessage');
-            const best = d.bestScenario;
-            const worst = d.worstScenario;
-            const diff = Math.max(d.loss5, d.polygonCost5, d.benefit5) - Math.min(d.loss5, d.polygonCost5, d.benefit5);
-
-            let msgClass = 'final-message best';
-            let icon = '🏆';
-            let title = 'Лучший сценарий';
-
-            if (best === 'А (как есть)') {
-                msgClass = 'final-message worst';
-                icon = '⚠️';
-                title = 'Худший сценарий';
-            } else if (best === 'Б (полигон платит)') {
-                icon = '🏗️';
-                title = 'Средний сценарий';
-            } else {
-                icon = '♻️';
-                title = '🔝 Лучший сценарий';
-            }
-
-            // Проверяем, есть ли выгода от переработки
-            const isBest = best === 'В (переработка)';
-
-            if (isBest) {
-                finalMsg.className = 'final-message best';
-                finalMsg.innerHTML = `
-                    <strong>${icon} ${title}: <span class="highlight">Сценарий В (переработка)</span></strong><br>
-                    Переработка осадка <strong>выгоднее</strong> обычного вывоза на <span class="big-number">${d.diffA_C.toLocaleString()} ₽</span> за 5 лет.
-                    <br><br>
-                    💰 Инвестиции в установку: <strong>${d.pc.toLocaleString()} ₽</strong><br>
-                    📈 Окупаемость: <strong>${d.payback < 100 ? d.payback.toFixed(1) + ' лет' : 'более 100 лет'}</strong><br>
-                    🤑 Чистая прибыль за 5 лет: <strong style="color: #4f8a5e;">${d.netProfit5.toLocaleString()} ₽</strong>
-                    <br><br>
-                    <em>«Осадок — это не отход, а ресурс. Переработка превращает затраты в доход».</em>
-                `;
-            } else {
-                finalMsg.className = 'final-message worst';
-                finalMsg.innerHTML = `
-                    <strong>${icon} ${title}: <span class="highlight">Сценарий ${best}</span></strong><br>
-                    Вывоз осадка на полигон обходится дороже переработки на <span class="big-number">${d.diffA_C.toLocaleString()} ₽</span> за 5 лет.
-                    <br><br>
-                    💡 Переработка могла бы сэкономить <strong>${d.diffA_C.toLocaleString()} ₽</strong> за 5 лет.
-                    <br><br>
-                    <em>«Возможно, стоит рассмотреть альтернативу — осадок может стать ценным ресурсом».</em>
-                `;
-            }
-
-            // Детали
-            const details = document.getElementById('detailsContainer');
-            details.innerHTML = `
-                <strong>📋 Детальный разбор за 5 лет:</strong><br>
-
-                <div class="details-grid">
-                    <div class="item">
-                        <span class="label">Сценарий А (вывоз):</span>
-                        <span class="value red">${d.loss5.toLocaleString()} ₽</span>
-                    </div>
-                    <div class="item" style="padding-left: 16px; border-bottom: none;">
-                        <span class="label" style="font-size: 13px;">• Вывоз: ${d.yearlyDisposal.toLocaleString()} ₽/год</span>
-                        <span class="value" style="font-size: 13px; color: var(--text-light);">×5 = ${(d.yearlyDisposal * 5).toLocaleString()} ₽</span>
-                    </div>
-                    <div class="item" style="padding-left: 16px; border-bottom: none;">
-                        <span class="label" style="font-size: 13px;">• НВОС: ${d.yearlyNVOS.toLocaleString()} ₽/год</span>
-                        <span class="value" style="font-size: 13px; color: var(--text-light);">×5 = ${(d.yearlyNVOS * 5).toLocaleString()} ₽</span>
-                    </div>
-
-                    <div class="item" style="border-top: 1px solid #ede7e0; padding-top: 6px;">
-                        <span class="label"><strong>Сценарий Б (грунт):</strong></span>
-                        <span class="value blue">${d.polygonCost5.toLocaleString()} ₽</span>
-                    </div>
-                    <div class="item" style="padding-left: 16px; border-bottom: none;">
-                        <span class="label" style="font-size: 13px;">• Грунт: ${d.volumePerYear.toLocaleString()} м³/год × ${d.gP} руб.</span>
-                        <span class="value" style="font-size: 13px; color: var(--text-light);">×5 = ${d.polygonCost5.toLocaleString()} ₽</span>
-                    </div>
-
-                    <div class="item" style="border-top: 1px solid #ede7e0; padding-top: 6px;">
-                        <span class="label"><strong>Сценарий В (переработка):</strong></span>
-                        <span class="value green">+${d.benefit5.toLocaleString()} ₽</span>
-                    </div>
-                    <div class="item" style="padding-left: 16px; border-bottom: none;">
-                        <span class="label" style="font-size: 13px;">• Экономия: ${(d.lossYear - d.newYearlyCost).toLocaleString()} ₽/год</span>
-                        <span class="value" style="font-size: 13px; color: var(--text-light);">×5 = ${(d.yearlySavings * 5).toLocaleString()} ₽</span>
-                    </div>
-                    <div class="item" style="padding-left: 16px; border-bottom: none;">
-                        <span class="label" style="font-size: 13px;">• Доход от продажи грунта: ${d.yearlyIncome.toLocaleString()} ₽/год</span>
-                        <span class="value" style="font-size: 13px; color: var(--text-light);">×5 = ${(d.yearlyIncome * 5).toLocaleString()} ₽</span>
-                    </div>
-                </div>
-
-                <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #ede7e0;">
-                    <strong>📌 Финальная рекультивация полигона:</strong> ${d.finalCost.toLocaleString()} ₽ (разовый платёж при закрытии)
-                </div>
-
-                <div class="details-note">
-                    <strong>⚡ Ключевой вывод:</strong>
-                    ${d.benefit5 > d.loss5 ?
-                        `Переработка выгоднее вывоза на <strong style="color: #4f8a5e;">${(d.benefit5 - d.loss5).toLocaleString()} ₽</strong> за 5 лет` :
-                        `Вывоз пока дешевле переработки на <strong style="color: #b16a6a;">${(d.loss5 - d.benefit5).toLocaleString()} ₽</strong>. Попробуйте увеличить объём осадка или снизить себестоимость переработки.`
-                    }
-                </div>
-            `;
-        }
-
-        // ============================================================
-        // 3. УПРАВЛЕНИЕ ВКЛАДКАМИ
-        // ============================================================
-
-        let resultsOpen = false;
-        let detailsOpen = false;
-
-        function toggleResults() {
-            resultsOpen = !resultsOpen;
-            const block = document.getElementById('resultsBlock');
-            const btn = document.getElementById('btnResults');
-
-            if (resultsOpen) {
-                block.classList.add('open');
-                btn.classList.add('active');
-                btn.innerHTML = '<span class="icon">📈</span> Скрыть результаты за 5 лет';
-                // Если детали открыты — закрываем их
-                if (detailsOpen) toggleDetails();
-            } else {
-                block.classList.remove('open');
+            // Обновить кнопки
+            document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
-                btn.innerHTML = '<span class="icon">📈</span> Посмотреть, что получается за 5 лет';
-            }
-            // Обновляем расчёты, если блок открылся
-            if (resultsOpen) updateAll();
-            smoothScrollTo(block);
-        }
-
-        function toggleDetails() {
-            detailsOpen = !detailsOpen;
-            const block = document.getElementById('detailsBlock');
-            const btn = document.getElementById('btnDetails');
-
-            if (detailsOpen) {
-                block.classList.add('open');
-                btn.classList.add('active-details');
-                btn.innerHTML = '<span class="icon">📋</span> Скрыть детальный разбор';
-                // Если результаты открыты — закрываем их
-                if (resultsOpen) toggleResults();
-            } else {
-                block.classList.remove('open');
-                btn.classList.remove('active-details');
-                btn.innerHTML = '<span class="icon">📋</span> Посмотреть детальный разбор';
-            }
-            // Обновляем расчёты, если блок открылся
-            if (detailsOpen) updateAll();
-            smoothScrollTo(block);
-        }
-
-        function smoothScrollTo(element) {
-            setTimeout(() => {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-        }
-
-        // ============================================================
-        // 4. ОБРАБОТЧИКИ СОБЫТИЙ
-        // ============================================================
-
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', function() {
-                // Если открыты результаты или детали — обновляем
-                if (resultsOpen || detailsOpen) updateAll();
-            });
-            input.addEventListener('change', function() {
-                if (resultsOpen || detailsOpen) updateAll();
-            });
-        });
-
-        // ============================================================
-        // 5. PDF
-        // ============================================================
-
-        function downloadPDF() {
-            // Открываем все блоки для печати
-            const resultsBlock = document.getElementById('resultsBlock');
-            const detailsBlock = document.getElementById('detailsBlock');
-            const wasResultsOpen = resultsOpen;
-            const wasDetailsOpen = detailsOpen;
-
-            // Принудительно открываем для печати
-            resultsBlock.classList.add('open');
-            detailsBlock.classList.add('open');
-            updateAll();
-
-            const style = document.createElement('style');
-            style.innerHTML = `
-                @media print {
-                    body { background: white !important; padding: 10px !important; }
-                    .container { box-shadow: none !important; border: 1px solid #ddd !important; border-radius: 16px !important; }
-                    .btn, .actions .btn, .btn-trigger { display: none !important; }
-                    .toggle-block { display: block !important; }
-                    .section:hover { border-color: #f0eae4 !important; }
-                    .result-card:hover { border-color: #ede7e0 !important; }
-                    .input-group input { border: 1px solid #ccc !important; background: #f9f9f9 !important; }
-                    .hint-box { background: #f5f2ee !important; }
-                    .compare-table td { border-bottom: 1px solid #e0e0e0 !important; }
-                    .final-message { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                    .result-card { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                    .highlight-green { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                    .highlight-rose { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                    .highlight-blue { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('active');
                 }
-            `;
-            document.head.appendChild(style);
-
-            // Обновляем расчёты перед печатью
-            updateAll();
-
-            window.print();
-
-            // Возвращаем состояние
-            document.head.removeChild(style);
-            if (!wasResultsOpen) resultsBlock.classList.remove('open');
-            if (!wasDetailsOpen) detailsBlock.classList.remove('open');
-        }
-
-        // ============================================================
-        // 6. СБРОС К СТАНДАРТУ
-        // ============================================================
-
-        function resetToDefault() {
-            const defaults = {
-                monthlyTons: 10,
-                disposalPrice: 1600,
-                nvosTarif: 1046.494,
-                groundPrice: 450,
-                polygonArea: 15,
-                isolationLayer: 0.25,
-                finalLayer: 0.40,
-                plantCost: 20000000,
-                processingCost: 400
-            };
-
-            Object.keys(defaults).forEach(id => {
-                document.getElementById(id).value = defaults[id];
             });
-
-            if (resultsOpen || detailsOpen) updateAll();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ============================================================
-        // 7. ИНИЦИАЛИЗАЦИЯ
-        // ============================================================
-
+        // Для совместимости с мобильными — тап по кнопкам
         document.addEventListener('DOMContentLoaded', function() {
-            // Небольшая подсказка в начале
-            updateAll();
+            // Ничего дополнительно не требуется
         });
     </script>
 
