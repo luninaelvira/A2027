@@ -18,7 +18,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
         }
 
         .container {
@@ -28,30 +28,28 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 40px;
-            padding: 28px 24px 32px;
+            padding: 24px 20px 28px;
             box-shadow: 0 20px 50px rgba(0, 30, 50, 0.20), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-            transition: 0.2s;
         }
 
         h1 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #0f2c40;
-            letter-spacing: -0.3px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 4px;
+            gap: 8px;
+            margin-bottom: 2px;
         }
 
         .sub {
             color: #2b5370;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             background: rgba(255, 255, 255, 0.5);
-            padding: 8px 16px;
+            padding: 6px 16px;
             border-radius: 60px;
             display: inline-block;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
@@ -59,19 +57,36 @@
         /* ——— РЯД ИЗ 3 КАРТОЧЕК ——— */
         .row {
             display: flex;
-            gap: 14px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            /* Гарантируем, что всегда в ряд */
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            /* Скрываем скроллбар, но оставляем возможность скроллить */
+            scrollbar-width: thin;
+        }
+
+        .row::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .row::-webkit-scrollbar-thumb {
+            background: #8aaec9;
+            border-radius: 10px;
         }
 
         .sludge-card {
-            flex: 1 1 0;
-            min-width: 190px;
+            flex: 1 0 0;
+            min-width: 0;
+            /* разрешаем сжиматься */
+            width: 33.333%;
+            max-width: 33.333%;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
-            border-radius: 24px;
-            padding: 16px 14px 18px;
+            border-radius: 20px;
+            padding: 14px 12px 16px;
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 6px 16px rgba(0, 20, 40, 0.06);
             transition: 0.2s;
@@ -93,49 +108,55 @@
 
         .sludge-title {
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #103a55;
-            line-height: 1.3;
-            margin-bottom: 2px;
+            line-height: 1.2;
+            margin-bottom: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .sludge-meta {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 500;
             color: #2b5a7a;
             background: rgba(60, 120, 170, 0.10);
             padding: 2px 10px;
             border-radius: 40px;
             display: inline-block;
-            margin: 4px 0 8px 0;
+            margin: 3px 0 6px 0;
             letter-spacing: 0.2px;
+            white-space: nowrap;
         }
 
         .sludge-desc {
-            font-size: 0.75rem;
+            font-size: 0.68rem;
             color: #1c405a;
             background: rgba(0, 0, 0, 0.02);
-            padding: 6px 10px;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            line-height: 1.4;
-            border: 1px solid rgba(0,0,0,0.02);
+            padding: 5px 8px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            flex-shrink: 0;
         }
 
         /* зона для перетаскивания */
         .dropzone-area {
             background: rgba(220, 235, 248, 0.4);
             border: 2px dashed #7f9eb8;
-            border-radius: 20px;
-            padding: 10px 8px;
-            min-height: 68px;
+            border-radius: 16px;
+            padding: 8px 6px;
+            min-height: 58px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
             transition: 0.2s;
             margin-top: auto;
+            flex-shrink: 0;
         }
 
         .dropzone-area.dragover {
@@ -146,11 +167,11 @@
 
         .dropzone-area .empty-hint {
             color: #6f8ba3;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 400;
             opacity: 0.7;
             text-align: center;
-            padding: 4px 0;
+            padding: 2px 0;
             user-select: none;
         }
 
@@ -158,18 +179,19 @@
         .drop-chip {
             background: white;
             border-radius: 40px;
-            padding: 4px 14px 4px 16px;
-            font-size: 0.75rem;
+            padding: 3px 10px 3px 12px;
+            font-size: 0.65rem;
             font-weight: 500;
             color: #0f3853;
             border: 1.5px solid #bbd3e6;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             cursor: grab;
             transition: 0.1s;
             user-select: none;
+            white-space: nowrap;
         }
 
         .drop-chip:active {
@@ -177,8 +199,8 @@
         }
 
         .drop-chip .remove-hint {
-            font-size: 0.65rem;
-            opacity: 0.5;
+            font-size: 0.55rem;
+            opacity: 0.4;
             font-weight: 300;
         }
 
@@ -186,13 +208,13 @@
         .options-pool {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px 10px;
+            gap: 6px 8px;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(4px);
-            padding: 14px 18px;
-            border-radius: 60px;
+            padding: 10px 14px;
+            border-radius: 40px;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
@@ -200,14 +222,14 @@
             background: white;
             border: 1.5px solid #2f6b8f;
             color: #103a55;
-            padding: 5px 18px;
+            padding: 4px 14px;
             border-radius: 60px;
             font-weight: 500;
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             cursor: grab;
             user-select: none;
             transition: 0.1s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
             white-space: nowrap;
         }
 
@@ -233,25 +255,26 @@
         .actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
             justify-content: space-between;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         .btn-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn {
             background: #1f5b7e;
             border: none;
             color: white;
-            padding: 10px 26px;
+            padding: 8px 20px;
             border-radius: 60px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             cursor: pointer;
             transition: 0.15s;
             box-shadow: 0 4px 12px rgba(0, 60, 100, 0.12);
@@ -273,37 +296,38 @@
 
         .result-badge {
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #0f3853;
             background: rgba(255, 255, 255, 0.5);
-            padding: 6px 18px;
+            padding: 5px 16px;
             border-radius: 60px;
             border: 1px solid rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(4px);
+            white-space: nowrap;
         }
 
         /* ——— ФИДБЕК ——— */
         .feedback {
-            margin-top: 18px;
+            margin-top: 16px;
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(4px);
-            border-radius: 24px;
-            padding: 14px 20px;
+            border-radius: 20px;
+            padding: 12px 16px;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         .feedback h3 {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #0b2b44;
-            margin: 0 0 6px 0;
+            margin: 0 0 4px 0;
             font-weight: 600;
         }
 
         .feedback ul {
-            padding-left: 20px;
+            padding-left: 18px;
             margin: 0;
-            font-size: 0.8rem;
-            line-height: 1.6;
+            font-size: 0.75rem;
+            line-height: 1.5;
             color: #1a3f59;
         }
 
@@ -315,291 +339,329 @@
         }
 
         .footnote {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #3b607a;
-            margin-top: 12px;
+            margin-top: 10px;
             text-align: center;
             opacity: 0.7;
             border-top: 1px solid rgba(255, 255, 255, 0.5);
-            padding-top: 12px;
+            padding-top: 10px;
         }
 
-        @media (max-width: 720px) {
-            .container { width: 100%; padding: 18px; }
-            .row { flex-direction: column; }
-            .sludge-card { min-width: unset; }
-            .options-pool { border-radius: 30px; }
-            .btn { padding: 8px 18px; font-size: 0.8rem; }
+        /* ——— АДАПТИВ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ ——— */
+        @media (max-width: 550px) {
+            .container {
+                padding: 16px 12px 20px;
+                border-radius: 28px;
+            }
+            .sludge-card {
+                padding: 10px 8px 12px;
+                min-width: 120px;
+            }
+            .sludge-title {
+                font-size: 0.75rem;
+            }
+            .sludge-desc {
+                font-size: 0.6rem;
+                padding: 4px 6px;
+            }
+            .drop-chip {
+                font-size: 0.55rem;
+                padding: 2px 8px 2px 10px;
+            }
+            .option-item {
+                font-size: 0.65rem;
+                padding: 3px 10px;
+            }
+            .btn {
+                font-size: 0.7rem;
+                padding: 6px 14px;
+            }
+            .result-badge {
+                font-size: 0.75rem;
+                padding: 4px 12px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .row {
+                gap: 6px;
+            }
+            .sludge-card {
+                min-width: 100px;
+                padding: 8px 6px 10px;
+            }
+            .dropzone-area {
+                min-height: 44px;
+                padding: 4px;
+            }
+            .sludge-meta {
+                font-size: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container" id="app">
-    <h1>♻️ Осадки → переработка</h1>
-    <div class="sub">Перетащите варианты в карточки (по 1–2 шт.). Двойной клик по чипу — вернуть в пул.</div>
+    <div class="container" id="app">
+        <h1>♻️ Осадки → переработка</h1>
+        <div class="sub">Перетащите варианты в карточки (по 1–2 шт.). Двойной клик по чипу — вернуть в пул.</div>
 
-    <!-- РЯД ИЗ 3 КАРТОЧЕК -->
-    <div class="row" id="sludgeRow"></div>
+        <!-- РЯД ИЗ 3 КАРТОЧЕК -->
+        <div class="row" id="sludgeRow"></div>
 
-    <!-- ПУЛ ВАРИАНТОВ -->
-    <div class="options-pool" id="optionsPool"></div>
+        <!-- ПУЛ ВАРИАНТОВ -->
+        <div class="options-pool" id="optionsPool"></div>
 
-    <!-- КНОПКИ -->
-    <div class="actions">
-        <div class="btn-group">
-            <button class="btn" id="checkBtn">✅ Проверить</button>
-            <button class="btn reset" id="resetBtn">⟳ Сброс</button>
+        <!-- КНОПКИ -->
+        <div class="actions">
+            <div class="btn-group">
+                <button class="btn" id="checkBtn">✅ Проверить</button>
+                <button class="btn reset" id="resetBtn">⟳ Сброс</button>
+            </div>
+            <span class="result-badge" id="resultBadge">⏳ 0/3</span>
         </div>
-        <span class="result-badge" id="resultBadge">⏳ 0/3</span>
+
+        <!-- ФИДБЕК -->
+        <div class="feedback" id="feedbackArea">
+            <h3>📘 Разбор</h3>
+            <ul id="feedbackList">
+                <li>Перетащите варианты из нижней панели в карточки осадков.</li>
+                <li>Каждый вариант можно использовать только один раз.</li>
+            </ul>
+        </div>
+        <div class="footnote">Москва · Краснодар · Екатеринбург</div>
     </div>
 
-    <!-- ФИДБЕК -->
-    <div class="feedback" id="feedbackArea">
-        <h3>📘 Разбор</h3>
-        <ul id="feedbackList">
-            <li>Перетащите варианты из нижней панели в карточки осадков.</li>
-            <li>Каждый вариант можно использовать только один раз.</li>
-        </ul>
-    </div>
-    <div class="footnote">Москва · Краснодар · Екатеринбург</div>
-</div>
-
-<script>
-    // ————— ДАННЫЕ —————
-    const sludgeData = [
-        {
+    <script>
+        // ————— ДАННЫЕ —————
+        const sludgeData = [{
             id: 'moscow',
             title: 'Москва (хозбыт)',
             meta: 'IV класс, влажн. 82%',
             desc: 'Орг. 45–55%, нефтепр. 500–800, металлы на пределе, патогены ↑',
             correct: ['Техногрунт для рекультивации', 'Термическая сушка → зола'],
             wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание']
-        },
-        {
+        }, {
             id: 'krasnodar',
             title: 'Краснодар (ЛОС)',
             meta: 'IV класс, влажн. 85%',
             desc: 'Орг. 60–70%, металлы/нефтепр. следовые, условно-патог.',
             correct: ['Компостирование → удобрение/почвогрунт'],
             wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание']
-        },
-        {
+        }, {
             id: 'ekb',
             title: 'Екатеринбург (гальваника)',
             meta: 'III класс, Cr до 5000',
             desc: 'Влажн. 92–95%, орг. 5–15%, металлы высокие, патогенов нет',
             correct: ['Стабилизация/иммобилизация → стройматериалы', 'Термическая обработка → шлак/зола'],
             wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание']
+        }];
+
+        const allOptions = [
+            'Техногрунт для рекультивации',
+            'Термическая сушка → зола',
+            'Компостирование → удобрение/почвогрунт',
+            'Стабилизация/иммобилизация → стройматериалы',
+            'Термическая обработка → шлак/зола',
+            'Прямое внесение в почву',
+            'Анаэробное сбраживание'
+        ];
+
+        let selections = { moscow: [], krasnodar: [], ekb: [] };
+
+        // ————— РЕНДЕР —————
+        function render() {
+            renderCards();
+            renderPool();
+            updateBadge();
         }
-    ];
 
-    const allOptions = [
-        'Техногрунт для рекультивации',
-        'Термическая сушка → зола',
-        'Компостирование → удобрение/почвогрунт',
-        'Стабилизация/иммобилизация → стройматериалы',
-        'Термическая обработка → шлак/зола',
-        'Прямое внесение в почву',
-        'Анаэробное сбраживание'
-    ];
+        function renderCards() {
+            const row = document.getElementById('sludgeRow');
+            row.innerHTML = '';
+            sludgeData.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'sludge-card';
+                card.dataset.id = s.id;
 
-    let selections = { moscow: [], krasnodar: [], ekb: [] };
+                card.innerHTML = `
+                    <div class="sludge-title">${s.title}</div>
+                    <div class="sludge-meta">${s.meta}</div>
+                    <div class="sludge-desc">${s.desc}</div>
+                `;
 
-    // ————— РЕНДЕР —————
-    function render() {
-        renderCards();
-        renderPool();
-        updateBadge();
-    }
+                const dropArea = document.createElement('div');
+                dropArea.className = 'dropzone-area';
+                dropArea.dataset.sludgeId = s.id;
 
-    function renderCards() {
-        const row = document.getElementById('sludgeRow');
-        row.innerHTML = '';
-        sludgeData.forEach(s => {
-            const card = document.createElement('div');
-            card.className = 'sludge-card';
-            card.dataset.id = s.id;
+                const selected = selections[s.id] || [];
+                if (selected.length === 0) {
+                    const hint = document.createElement('div');
+                    hint.className = 'empty-hint';
+                    hint.textContent = '⬇️ сюда';
+                    dropArea.appendChild(hint);
+                } else {
+                    selected.forEach(opt => {
+                        const chip = createChip(opt, s.id);
+                        dropArea.appendChild(chip);
+                    });
+                }
 
-            card.innerHTML = `
-                <div class="sludge-title">${s.title}</div>
-                <div class="sludge-meta">${s.meta}</div>
-                <div class="sludge-desc">${s.desc}</div>
-            `;
-
-            const dropArea = document.createElement('div');
-            dropArea.className = 'dropzone-area';
-            dropArea.dataset.sludgeId = s.id;
-
-            const selected = selections[s.id] || [];
-            if (selected.length === 0) {
-                const hint = document.createElement('div');
-                hint.className = 'empty-hint';
-                hint.textContent = '⬇️ сюда вариант';
-                dropArea.appendChild(hint);
-            } else {
-                selected.forEach(opt => {
-                    const chip = createChip(opt, s.id);
-                    dropArea.appendChild(chip);
+                dropArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropArea.classList.add('dragover');
                 });
-            }
+                dropArea.addEventListener('dragleave', () => {
+                    dropArea.classList.remove('dragover');
+                });
+                dropArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropArea.classList.remove('dragover');
+                    const opt = e.dataTransfer.getData('text/plain');
+                    if (!opt) return;
+                    const sid = dropArea.dataset.sludgeId;
 
-            // события дропзоны
-            dropArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropArea.classList.add('dragover');
-            });
-            dropArea.addEventListener('dragleave', () => {
-                dropArea.classList.remove('dragover');
-            });
-            dropArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropArea.classList.remove('dragover');
-                const opt = e.dataTransfer.getData('text/plain');
-                if (!opt) return;
-                const sid = dropArea.dataset.sludgeId;
+                    let used = false;
+                    for (const [sid2, opts] of Object.entries(selections)) {
+                        if (sid2 !== sid && opts.includes(opt)) { used = true; break; }
+                    }
+                    if (used) {
+                        alert(`«${opt}» уже используется в другой карточке. Удалите оттуда (двойной клик).`);
+                        return;
+                    }
+                    if (selections[sid].includes(opt)) return;
+                    selections[sid].push(opt);
+                    render();
+                });
 
-                // занят ли уже где-то
-                let used = false;
-                for (const [sid2, opts] of Object.entries(selections)) {
-                    if (sid2 !== sid && opts.includes(opt)) { used = true; break; }
-                }
-                if (used) {
-                    alert(`«${opt}» уже используется в другой карточке. Удалите оттуда (двойной клик).`);
-                    return;
-                }
-                if (selections[sid].includes(opt)) return;
-                selections[sid].push(opt);
+                card.appendChild(dropArea);
+                row.appendChild(card);
+            });
+        }
+
+        function createChip(optionText, sludgeId) {
+            const chip = document.createElement('div');
+            chip.className = 'drop-chip';
+            chip.draggable = true;
+            chip.innerHTML = `${optionText} <span class="remove-hint">↕✕</span>`;
+            chip.dataset.option = optionText;
+            chip.dataset.sludgeId = sludgeId;
+
+            chip.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', optionText);
+                chip.classList.add('dragging');
+            });
+            chip.addEventListener('dragend', () => {
+                chip.classList.remove('dragging');
+            });
+
+            chip.addEventListener('dblclick', () => {
+                const sid = chip.dataset.sludgeId;
+                const opt = chip.dataset.option;
+                selections[sid] = selections[sid].filter(o => o !== opt);
                 render();
             });
 
-            card.appendChild(dropArea);
-            row.appendChild(card);
-        });
-    }
-
-    function createChip(optionText, sludgeId) {
-        const chip = document.createElement('div');
-        chip.className = 'drop-chip';
-        chip.draggable = true;
-        chip.innerHTML = `${optionText} <span class="remove-hint">↕✕</span>`;
-        chip.dataset.option = optionText;
-        chip.dataset.sludgeId = sludgeId;
-
-        chip.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', optionText);
-            chip.classList.add('dragging');
-        });
-        chip.addEventListener('dragend', () => {
-            chip.classList.remove('dragging');
-        });
-
-        // двойной клик — вернуть в пул
-        chip.addEventListener('dblclick', () => {
-            const sid = chip.dataset.sludgeId;
-            const opt = chip.dataset.option;
-            selections[sid] = selections[sid].filter(o => o !== opt);
-            render();
-        });
-
-        return chip;
-    }
-
-    function renderPool() {
-        const pool = document.getElementById('optionsPool');
-        pool.innerHTML = '';
-        const used = new Set();
-        for (const opts of Object.values(selections)) {
-            opts.forEach(o => used.add(o));
+            return chip;
         }
 
-        allOptions.forEach(opt => {
-            const el = document.createElement('div');
-            el.className = 'option-item';
-            if (used.has(opt)) el.classList.add('used');
-            el.textContent = opt;
-            el.draggable = true;
-            el.dataset.option = opt;
+        function renderPool() {
+            const pool = document.getElementById('optionsPool');
+            pool.innerHTML = '';
+            const used = new Set();
+            for (const opts of Object.values(selections)) {
+                opts.forEach(o => used.add(o));
+            }
 
-            el.addEventListener('dragstart', (e) => {
-                if (el.classList.contains('used')) {
-                    e.preventDefault();
-                    return;
+            allOptions.forEach(opt => {
+                const el = document.createElement('div');
+                el.className = 'option-item';
+                if (used.has(opt)) el.classList.add('used');
+                el.textContent = opt;
+                el.draggable = true;
+                el.dataset.option = opt;
+
+                el.addEventListener('dragstart', (e) => {
+                    if (el.classList.contains('used')) {
+                        e.preventDefault();
+                        return;
+                    }
+                    e.dataTransfer.setData('text/plain', opt);
+                    el.classList.add('dragging');
+                });
+                el.addEventListener('dragend', () => {
+                    el.classList.remove('dragging');
+                });
+
+                pool.appendChild(el);
+            });
+        }
+
+        function updateBadge() {
+            let filled = 0;
+            for (const s of sludgeData) {
+                if (selections[s.id] && selections[s.id].length > 0) filled++;
+            }
+            document.getElementById('resultBadge').textContent = `⏳ ${filled}/3`;
+        }
+
+        // ————— ПРОВЕРКА —————
+        function checkAnswers() {
+            let correct = 0;
+            const list = document.getElementById('feedbackList');
+            list.innerHTML = '';
+
+            document.querySelectorAll('.sludge-card').forEach(c => c.classList.remove('correct', 'wrong'));
+
+            sludgeData.forEach(s => {
+                const selected = selections[s.id] || [];
+                const correctSet = new Set(s.correct);
+                const card = document.querySelector(`.sludge-card[data-id="${s.id}"]`);
+                let ok = true;
+
+                if (selected.length !== s.correct.length) ok = false;
+                for (const opt of selected) {
+                    if (!correctSet.has(opt)) ok = false;
                 }
-                e.dataTransfer.setData('text/plain', opt);
-                el.classList.add('dragging');
-            });
-            el.addEventListener('dragend', () => {
-                el.classList.remove('dragging');
+
+                if (ok) {
+                    card.classList.add('correct');
+                    correct++;
+                    list.innerHTML += `<li class="good">✅ ${s.title} — верно (${s.correct.join('; ')})</li>`;
+                } else {
+                    card.classList.add('wrong');
+                    list.innerHTML +=
+                        `<li class="bad">❌ ${s.title} — выбрано: ${selected.length ? selected.join('; ') : '—'}. Правильно: ${s.correct.join('; ')}</li>`;
+                }
             });
 
-            pool.appendChild(el);
-        });
-    }
-
-    function updateBadge() {
-        let filled = 0;
-        for (const s of sludgeData) {
-            if (selections[s.id] && selections[s.id].length > 0) filled++;
+            list.innerHTML += `
+                <li style="margin-top:6px; background:rgba(255,255,255,0.4); padding:4px 12px; border-radius:30px;">
+                    <strong>🧠 Вывод:</strong> Москва → техногрунт/сушка; Краснодар → компостирование; 
+                    Екатеринбург → стабилизация/термообработка. Прямое внесение и биогаз — не подходят.
+                </li>
+            `;
+            document.getElementById('resultBadge').textContent = `✅ ${correct}/3`;
         }
-        document.getElementById('resultBadge').textContent = `⏳ ${filled}/3`;
-    }
 
-    // ————— ПРОВЕРКА —————
-    function checkAnswers() {
-        let correct = 0;
-        const list = document.getElementById('feedbackList');
-        list.innerHTML = '';
+        // ————— СБРОС —————
+        function resetAll() {
+            selections = { moscow: [], krasnodar: [], ekb: [] };
+            render();
+            document.querySelectorAll('.sludge-card').forEach(c => c.classList.remove('correct', 'wrong'));
+            document.getElementById('feedbackList').innerHTML = `
+                <li>Перетащите варианты из нижней панели в карточки осадков.</li>
+                <li>Каждый вариант можно использовать только один раз.</li>
+            `;
+            document.getElementById('resultBadge').textContent = '⏳ 0/3';
+        }
 
-        document.querySelectorAll('.sludge-card').forEach(c => c.classList.remove('correct', 'wrong'));
+        // ————— КНОПКИ —————
+        document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+        document.getElementById('resetBtn').addEventListener('click', resetAll);
 
-        sludgeData.forEach(s => {
-            const selected = selections[s.id] || [];
-            const correctSet = new Set(s.correct);
-            const card = document.querySelector(`.sludge-card[data-id="${s.id}"]`);
-            let ok = true;
-
-            if (selected.length !== s.correct.length) ok = false;
-            for (const opt of selected) {
-                if (!correctSet.has(opt)) ok = false;
-            }
-
-            if (ok) {
-                card.classList.add('correct');
-                correct++;
-                list.innerHTML += `<li class="good">✅ ${s.title} — верно (${s.correct.join('; ')})</li>`;
-            } else {
-                card.classList.add('wrong');
-                list.innerHTML += `<li class="bad">❌ ${s.title} — выбрано: ${selected.length ? selected.join('; ') : '—'}. Правильно: ${s.correct.join('; ')}</li>`;
-            }
-        });
-
-        list.innerHTML += `
-            <li style="margin-top:8px; background:rgba(255,255,255,0.4); padding:6px 14px; border-radius:30px;">
-                <strong>🧠 Вывод:</strong> Москва → техногрунт/сушка; Краснодар → компостирование; 
-                Екатеринбург → стабилизация/термообработка. Прямое внесение и биогаз — не подходят.
-            </li>
-        `;
-        document.getElementById('resultBadge').textContent = `✅ ${correct}/3`;
-    }
-
-    // ————— СБРОС —————
-    function resetAll() {
-        selections = { moscow: [], krasnodar: [], ekb: [] };
         render();
-        document.querySelectorAll('.sludge-card').forEach(c => c.classList.remove('correct', 'wrong'));
-        document.getElementById('feedbackList').innerHTML = `
-            <li>Перетащите варианты из нижней панели в карточки осадков.</li>
-            <li>Каждый вариант можно использовать только один раз.</li>
-        `;
-        document.getElementById('resultBadge').textContent = '⏳ 0/3';
-    }
-
-    // ————— КНОПКИ —————
-    document.getElementById('checkBtn').addEventListener('click', checkAnswers);
-    document.getElementById('resetBtn').addEventListener('click', resetAll);
-
-    render();
-</script>
+    </script>
 </body>
 </html>
