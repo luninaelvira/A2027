@@ -24,11 +24,11 @@
         .container {
             width: 700px;
             max-width: 100%;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.78);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 40px;
-            padding: 24px 20px 28px;
+            padding: 24px 18px 28px;
             box-shadow: 0 20px 50px rgba(0, 30, 50, 0.20), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
         }
 
@@ -44,42 +44,38 @@
 
         .sub {
             color: #2b5370;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             background: rgba(255, 255, 255, 0.5);
-            padding: 6px 16px;
+            padding: 5px 16px;
             border-radius: 60px;
             display: inline-block;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* ——— РЯД ИЗ 3 КАРТОЧЕК ——— */
+        /* ——— РЯД ——— */
         .row {
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            /* Гарантируем, что всегда в ряд */
+            gap: 10px;
+            margin-bottom: 18px;
             flex-wrap: nowrap;
             overflow-x: auto;
             padding-bottom: 4px;
-            /* Скрываем скроллбар, но оставляем возможность скроллить */
             scrollbar-width: thin;
         }
-
         .row::-webkit-scrollbar {
             height: 4px;
         }
-
         .row::-webkit-scrollbar-thumb {
             background: #8aaec9;
             border-radius: 10px;
         }
 
+        /* ——— КАРТОЧКА ——— */
         .sludge-card {
             flex: 1 0 0;
             min-width: 0;
-            /* разрешаем сжиматься */
             width: 33.333%;
             max-width: 33.333%;
             background: rgba(255, 255, 255, 0.7);
@@ -89,21 +85,20 @@
             padding: 14px 12px 16px;
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 6px 16px rgba(0, 20, 40, 0.06);
-            transition: 0.2s;
+            transition: 0.25s;
             display: flex;
             flex-direction: column;
         }
 
         .sludge-card.correct {
             border: 2px solid #2a8e5c;
-            background: rgba(230, 248, 238, 0.7);
-            box-shadow: 0 0 0 2px rgba(42, 142, 92, 0.15);
+            background: rgba(230, 248, 238, 0.8);
+            box-shadow: 0 0 0 3px rgba(42, 142, 92, 0.15);
         }
-
         .sludge-card.wrong {
             border: 2px solid #c94a4a;
-            background: rgba(255, 240, 240, 0.7);
-            box-shadow: 0 0 0 2px rgba(201, 74, 74, 0.12);
+            background: rgba(255, 240, 240, 0.8);
+            box-shadow: 0 0 0 3px rgba(201, 74, 74, 0.12);
         }
 
         .sludge-title {
@@ -111,10 +106,7 @@
             font-size: 0.85rem;
             color: #103a55;
             line-height: 1.2;
-            margin-bottom: 1px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 2px;
         }
 
         .sludge-meta {
@@ -125,30 +117,33 @@
             padding: 2px 10px;
             border-radius: 40px;
             display: inline-block;
-            margin: 3px 0 6px 0;
+            margin: 2px 0 6px 0;
             letter-spacing: 0.2px;
-            white-space: nowrap;
         }
 
+        /* расширенное описание */
         .sludge-desc {
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             color: #1c405a;
             background: rgba(0, 0, 0, 0.02);
-            padding: 5px 8px;
+            padding: 6px 8px;
             border-radius: 12px;
             margin-bottom: 10px;
-            line-height: 1.3;
+            line-height: 1.45;
             border: 1px solid rgba(0, 0, 0, 0.02);
             flex-shrink: 0;
         }
+        .sludge-desc strong {
+            color: #0a3147;
+        }
 
-        /* зона для перетаскивания */
+        /* дропзона */
         .dropzone-area {
-            background: rgba(220, 235, 248, 0.4);
+            background: rgba(220, 235, 248, 0.35);
             border: 2px dashed #7f9eb8;
             border-radius: 16px;
             padding: 8px 6px;
-            min-height: 58px;
+            min-height: 56px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
@@ -158,16 +153,14 @@
             margin-top: auto;
             flex-shrink: 0;
         }
-
         .dropzone-area.dragover {
             background: rgba(180, 215, 240, 0.5);
             border-color: #0077be;
             transform: scale(1.01);
         }
-
         .dropzone-area .empty-hint {
             color: #6f8ba3;
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             font-weight: 400;
             opacity: 0.7;
             text-align: center;
@@ -175,12 +168,12 @@
             user-select: none;
         }
 
-        /* чип внутри дропзоны */
+        /* чип */
         .drop-chip {
             background: white;
             border-radius: 40px;
             padding: 3px 10px 3px 12px;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 500;
             color: #0f3853;
             border: 1.5px solid #bbd3e6;
@@ -189,22 +182,19 @@
             align-items: center;
             gap: 4px;
             cursor: grab;
-            transition: 0.1s;
             user-select: none;
             white-space: nowrap;
         }
-
         .drop-chip:active {
             cursor: grabbing;
         }
-
         .drop-chip .remove-hint {
-            font-size: 0.55rem;
-            opacity: 0.4;
+            font-size: 0.5rem;
+            opacity: 0.35;
             font-weight: 300;
         }
 
-        /* ——— ПУЛ ВАРИАНТОВ ——— */
+        /* ——— ПУЛ ——— */
         .options-pool {
             display: flex;
             flex-wrap: wrap;
@@ -225,19 +215,17 @@
             padding: 4px 14px;
             border-radius: 60px;
             font-weight: 500;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             cursor: grab;
             user-select: none;
             transition: 0.1s;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
             white-space: nowrap;
         }
-
         .option-item:active {
             cursor: grabbing;
             opacity: 0.6;
         }
-
         .option-item.used {
             opacity: 0.3;
             pointer-events: none;
@@ -245,13 +233,12 @@
             background: #e4edf5;
             filter: grayscale(0.5);
         }
-
         .option-item.dragging {
             opacity: 0.2;
             transform: scale(0.95);
         }
 
-        /* ——— КНОПКИ И РЕЗУЛЬТАТ ——— */
+        /* ——— КНОПКИ ——— */
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -274,18 +261,16 @@
             padding: 8px 20px;
             border-radius: 60px;
             font-weight: 600;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: 0.15s;
             box-shadow: 0 4px 12px rgba(0, 60, 100, 0.12);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .btn:hover {
             background: #124a6a;
             transform: scale(1.02);
         }
-
         .btn.reset {
             background: #6f8b9f;
             box-shadow: none;
@@ -296,7 +281,7 @@
 
         .result-badge {
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #0f3853;
             background: rgba(255, 255, 255, 0.5);
             padding: 5px 16px;
@@ -306,20 +291,20 @@
             white-space: nowrap;
         }
 
-        /* ——— ФИДБЕК ——— */
+        /* ——— ФИДБЕК (РАСШИРЕННЫЙ) ——— */
         .feedback {
             margin-top: 16px;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.55);
             backdrop-filter: blur(4px);
             border-radius: 20px;
-            padding: 12px 16px;
+            padding: 14px 18px;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         .feedback h3 {
             font-size: 0.85rem;
             color: #0b2b44;
-            margin: 0 0 4px 0;
+            margin: 0 0 6px 0;
             font-weight: 600;
         }
 
@@ -327,19 +312,36 @@
             padding-left: 18px;
             margin: 0;
             font-size: 0.75rem;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #1a3f59;
         }
 
         .feedback .good {
             color: #1d6b47;
+            font-weight: 500;
         }
         .feedback .bad {
             color: #b13a3a;
+            font-weight: 500;
+        }
+        .feedback .detail {
+            color: #1f4a66;
+            font-size: 0.72rem;
+            opacity: 0.85;
+        }
+
+        .feedback .verdict-box {
+            margin-top: 8px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            border-left: 4px solid #2f6b8f;
+            font-size: 0.75rem;
+            line-height: 1.5;
         }
 
         .footnote {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             color: #3b607a;
             margin-top: 10px;
             text-align: center;
@@ -348,21 +350,21 @@
             padding-top: 10px;
         }
 
-        /* ——— АДАПТИВ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ ——— */
+        /* ——— АДАПТИВ ——— */
         @media (max-width: 550px) {
             .container {
-                padding: 16px 12px 20px;
+                padding: 16px 10px 18px;
                 border-radius: 28px;
             }
             .sludge-card {
                 padding: 10px 8px 12px;
-                min-width: 120px;
+                min-width: 130px;
             }
             .sludge-title {
                 font-size: 0.75rem;
             }
             .sludge-desc {
-                font-size: 0.6rem;
+                font-size: 0.58rem;
                 padding: 4px 6px;
             }
             .drop-chip {
@@ -370,7 +372,7 @@
                 padding: 2px 8px 2px 10px;
             }
             .option-item {
-                font-size: 0.65rem;
+                font-size: 0.62rem;
                 padding: 3px 10px;
             }
             .btn {
@@ -378,8 +380,12 @@
                 padding: 6px 14px;
             }
             .result-badge {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
                 padding: 4px 12px;
+            }
+            .feedback ul {
+                font-size: 0.68rem;
+                padding-left: 14px;
             }
         }
 
@@ -388,7 +394,7 @@
                 gap: 6px;
             }
             .sludge-card {
-                min-width: 100px;
+                min-width: 110px;
                 padding: 8px 6px 10px;
             }
             .dropzone-area {
@@ -428,34 +434,54 @@
             <ul id="feedbackList">
                 <li>Перетащите варианты из нижней панели в карточки осадков.</li>
                 <li>Каждый вариант можно использовать только один раз.</li>
+                <li class="detail">После проверки вы увидите подробное обоснование.</li>
             </ul>
         </div>
         <div class="footnote">Москва · Краснодар · Екатеринбург</div>
     </div>
 
     <script>
-        // ————— ДАННЫЕ —————
+        // ————— ДАННЫЕ С РАСШИРЕННЫМИ ОПИСАНИЯМИ —————
         const sludgeData = [{
             id: 'moscow',
-            title: 'Москва (хозбыт)',
-            meta: 'IV класс, влажн. 82%',
-            desc: 'Орг. 45–55%, нефтепр. 500–800, металлы на пределе, патогены ↑',
+            title: '📍 Москва (хозбытовые)',
+            meta: 'IV класс опасности · влажность 82%',
+            desc: `
+                <strong>Состав:</strong> органика 45–55%, нефтепродукты 500–800 мг/кг,
+                тяжёлые металлы на пределе (Zn до 1500, Cu до 300, Pb до 200 мг/кг).
+                <strong>Риски:</strong> патогены (БГКП 10⁴–10⁵ КОЕ/г, яйца гельминтов),
+                нестабильность из-за промышленных стоков.
+            `,
             correct: ['Техногрунт для рекультивации', 'Термическая сушка → зола'],
-            wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание']
+            wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание'],
+            explanation: 'Техногрунт используют для рекультивации полигонов и технических насыпей — там не требуется высокая экологическая чистота. Зола после сушки — минеральный компонент без органики и патогенов. Металлы и нефтепродукты контролируются назначением продукта.'
         }, {
             id: 'krasnodar',
-            title: 'Краснодар (ЛОС)',
-            meta: 'IV класс, влажн. 85%',
-            desc: 'Орг. 60–70%, металлы/нефтепр. следовые, условно-патог.',
+            title: '📍 Краснодар (ЛОС завода)',
+            meta: 'IV класс опасности · влажность 85%',
+            desc: `
+                <strong>Состав:</strong> органика 60–70%, взвешенные вещества 12–18%,
+                металлы и нефтепродукты — на следовых уровнях.
+                <strong>Особенности:</strong> высокая доля условно-патогенной флоры,
+                патогены в небольших концентрациях. Основная масса — остатки сырья
+                и моющие растворы.
+            `,
             correct: ['Компостирование → удобрение/почвогрунт'],
-            wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание']
+            wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание'],
+            explanation: 'Компостирование — лучший выбор: высокая доля органики и низкие уровни токсичных примесей позволяют получить качественный почвогрунт или удобрение. Технология раскрывает основную ценность осадка.'
         }, {
             id: 'ekb',
-            title: 'Екатеринбург (гальваника)',
-            meta: 'III класс, Cr до 5000',
-            desc: 'Влажн. 92–95%, орг. 5–15%, металлы высокие, патогенов нет',
+            title: '📍 Екатеринбург (гальваника)',
+            meta: 'III класс опасности · влажность 92–95%',
+            desc: `
+                <strong>Состав:</strong> Cr до 5000, Ni до 2000, Zn до 3000 мг/кг,
+                органика 5–15% (ПАВ, комплексообразователи), pH 8,0–9,0.
+                <strong>Особенности:</strong> патогены практически отсутствуют,
+                но высокие концентрации тяжёлых металлов делают осадок опасным.
+            `,
             correct: ['Стабилизация/иммобилизация → стройматериалы', 'Термическая обработка → шлак/зола'],
-            wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание']
+            wrong: ['Прямое внесение в почву', 'Анаэробное сбраживание'],
+            explanation: 'Стабилизация и иммобилизация фиксируют тяжёлые металлы, делая материал инертным для стройиндустрии. Термическая обработка даёт шлак/золу для строительных материалов. Это единственно безопасные пути.'
         }];
 
         const allOptions = [
@@ -499,7 +525,7 @@
                 if (selected.length === 0) {
                     const hint = document.createElement('div');
                     hint.className = 'empty-hint';
-                    hint.textContent = '⬇️ сюда';
+                    hint.textContent = '⬇️ перетащите вариант';
                     dropArea.appendChild(hint);
                 } else {
                     selected.forEach(opt => {
@@ -606,7 +632,7 @@
             document.getElementById('resultBadge').textContent = `⏳ ${filled}/3`;
         }
 
-        // ————— ПРОВЕРКА —————
+        // ————— ПРОВЕРКА С РАЗВЁРНУТОЙ ОБРАТНОЙ СВЯЗЬЮ —————
         function checkAnswers() {
             let correct = 0;
             const list = document.getElementById('feedbackList');
@@ -625,23 +651,60 @@
                     if (!correctSet.has(opt)) ok = false;
                 }
 
+                const correctStr = s.correct.join('; ');
+                const selectedStr = selected.length ? selected.join('; ') : '—';
+
                 if (ok) {
                     card.classList.add('correct');
                     correct++;
-                    list.innerHTML += `<li class="good">✅ ${s.title} — верно (${s.correct.join('; ')})</li>`;
+                    list.innerHTML += `
+                        <li class="good">✅ ${s.title} — <strong>верно!</strong> (выбрано: ${selectedStr})</li>
+                        <li style="margin-left:20px; font-size:0.72rem; color:#1d5a3a; opacity:0.9; margin-bottom:6px;">
+                            ${s.explanation}
+                        </li>
+                    `;
                 } else {
                     card.classList.add('wrong');
-                    list.innerHTML +=
-                        `<li class="bad">❌ ${s.title} — выбрано: ${selected.length ? selected.join('; ') : '—'}. Правильно: ${s.correct.join('; ')}</li>`;
+                    list.innerHTML += `
+                        <li class="bad">❌ ${s.title} — <strong>неверно</strong></li>
+                        <li style="margin-left:20px; font-size:0.72rem; color:#7a2a2a; margin-bottom:4px;">
+                            <span style="background:rgba(0,0,0,0.04); padding:2px 8px; border-radius:12px;">
+                                Ваш выбор: ${selectedStr}
+                            </span>
+                            <br />
+                            <span style="background:rgba(42,142,92,0.10); padding:2px 8px; border-radius:12px;">
+                                ✅ Правильно: ${correctStr}
+                            </span>
+                        </li>
+                        <li style="margin-left:20px; font-size:0.72rem; color:#1f4a66; margin-bottom:6px;">
+                            ${s.explanation}
+                        </li>
+                    `;
                 }
             });
 
+            // Общий вердикт
+            let verdict = '';
+            if (correct === 3) {
+                verdict = '🎉 Отлично! Все осадки распределены верно. Вы хорошо разобрались в специфике переработки разных типов осадков.';
+            } else if (correct === 2) {
+                verdict = '👍 Хороший результат! Один осадок требует внимания — перечитайте пояснения выше.';
+            } else if (correct === 1) {
+                verdict = '🧐 Пока только один верный ответ. Внимательно изучите состав каждого осадка и подберите подходящую технологию.';
+            } else {
+                verdict = '📖 Попробуйте ещё раз. Вспомните: для органических осадков подходит компостирование, для токсичных — стабилизация, а для смешанных — техногрунт или сушка.';
+            }
+
             list.innerHTML += `
-                <li style="margin-top:6px; background:rgba(255,255,255,0.4); padding:4px 12px; border-radius:30px;">
-                    <strong>🧠 Вывод:</strong> Москва → техногрунт/сушка; Краснодар → компостирование; 
-                    Екатеринбург → стабилизация/термообработка. Прямое внесение и биогаз — не подходят.
+                <li class="verdict-box" style="list-style:none; margin-top:8px; padding:10px 16px; background:rgba(255,255,255,0.5); border-radius:16px; border-left:4px solid #2f6b8f;">
+                    <strong style="color:#0b2b44;">📌 Итог:</strong> ${verdict}
+                </li>
+                <li style="list-style:none; font-size:0.7rem; color:#3b607a; margin-top:6px;">
+                    ⚠️ Прямое внесение в почву — опасно для всех трёх осадков (токсичность, патогены, нарушение баланса).<br />
+                    ⚠️ Анаэробное сбраживание — не универсально: металлы подавляют микрофлору, экономически невыгодно.
                 </li>
             `;
+
             document.getElementById('resultBadge').textContent = `✅ ${correct}/3`;
         }
 
@@ -653,6 +716,7 @@
             document.getElementById('feedbackList').innerHTML = `
                 <li>Перетащите варианты из нижней панели в карточки осадков.</li>
                 <li>Каждый вариант можно использовать только один раз.</li>
+                <li class="detail">После проверки вы увидите подробное обоснование.</li>
             `;
             document.getElementById('resultBadge').textContent = '⏳ 0/3';
         }
